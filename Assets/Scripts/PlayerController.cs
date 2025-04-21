@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
 
     private int energy = 10;
+    public bool HasEnergy => energy > 0;
+
     private Vector2Int _gridPosition;
     private GridManager _gridManager;
 
@@ -20,7 +22,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_gridManager == null) return;
+        if (_gridManager == null || !HasEnergy) 
+            return;
 
         var m = Vector2Int.zero;
         if (Input.GetKeyDown(KeyCode.UpArrow))    m.y = +1;
@@ -34,6 +37,12 @@ public class PlayerController : MonoBehaviour
 
     public void MoveTo(Vector2Int target)
     {
+        if (!HasEnergy)
+        {
+            Debug.Log("No energy left – cannot move.");
+            return;
+        }
+
         if (!_gridManager.IsPositionValid(target))
         {
             Debug.Log("Tried to move to invalid tile.");
@@ -41,7 +50,6 @@ public class PlayerController : MonoBehaviour
         }
 
         _gridManager.ClearHighlights();
-
         _gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1);
         energy--;

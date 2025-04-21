@@ -14,18 +14,17 @@ public class Tile : MonoBehaviour
         _renderer.color = isOffset ? _offsetColor : _baseColor;
     }
 
-    [System.Obsolete]
     public void OnMouseOver()
     {
         var p = PlayerController.Instance;
-        if (p != null && IsNextTo(p.GetGridPosition(), _gridPos))
+        if (p != null && p.HasEnergy && IsNextTo(p.GetGridPosition(), _gridPos))
             _highlight.SetActive(true);
     }
 
     public void OnMouseDown()
     {
         var p = PlayerController.Instance;
-        if (p != null && IsNextTo(p.GetGridPosition(), _gridPos))
+        if (p != null && p.HasEnergy && IsNextTo(p.GetGridPosition(), _gridPos))
             p.MoveTo(_gridPos);
     }
 
@@ -36,5 +35,6 @@ public class Tile : MonoBehaviour
         (Mathf.Abs(a.x - b.x) == 1 && a.y == b.y) ||
         (Mathf.Abs(a.y - b.y) == 1 && a.x == b.x);
 
-    public void HideHighlight() => _highlight.SetActive(false);
+    public void HideHighlight() =>
+        _highlight.SetActive(false);
 }
