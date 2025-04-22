@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Hover : MonoBehaviour
 {
-    [SerializeField] private float amplitude = 0.2f;
+    [SerializeField] private float amplitude = 0.15f;
     [SerializeField] private float frequency = 1f;
     private Vector3 _origin;
 
