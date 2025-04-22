@@ -31,7 +31,7 @@ public class GridManager : MonoBehaviour
             }
 
         _player = Instantiate(_playerPrefab);
-        _player.Init(new Vector2Int(5, 5), this);
+        _player.Init(new Vector2Int(3, 4), this);
         _cam.position = new Vector3(_width/2f - .5f, _height/2f - .5f, -10);
     }
 
