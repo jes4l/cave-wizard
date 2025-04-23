@@ -1,4 +1,3 @@
-// PlayerController.cs
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour

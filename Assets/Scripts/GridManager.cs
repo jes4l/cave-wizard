@@ -1,4 +1,3 @@
-// GridManager.cs
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -11,8 +10,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform cam;
     [SerializeField] private PlayerController playerPrefab;
     [SerializeField] private Tilemap obstacleTilemap;
-    [SerializeField] private Tilemap torchRoomTilemap;
-    [SerializeField] private Tilemap torchDoorTilemap;
+    [SerializeField] private Tilemap torchRoomCollisionTilemap;
+    [SerializeField] private Tilemap torchDoorCollisionTilemap;
 
     private PlayerController player;
     private readonly HashSet<Vector2Int> blockedCells = new();
@@ -21,12 +20,12 @@ public class GridManager : MonoBehaviour
     void Awake()
     {
         obstacleTilemap    ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
-        torchRoomTilemap   ??= GameObject.Find("TilemapTorchRoom")?.GetComponent<Tilemap>();
-        torchDoorTilemap   ??= GameObject.Find("TilemapTorchDoor")?.GetComponent<Tilemap>();
+        torchRoomCollisionTilemap   ??= GameObject.Find("TilemapTorchRoomCollision")?.GetComponent<Tilemap>();
+        torchDoorCollisionTilemap   ??= GameObject.Find("TilemapTorchDoorCollision")?.GetComponent<Tilemap>();
 
         if (obstacleTilemap != null) CacheTiles(obstacleTilemap, blockedCells);
-        if (torchRoomTilemap != null) CacheTiles(torchRoomTilemap, deadlyCells);
-        if (torchDoorTilemap != null) CacheTiles(torchDoorTilemap, deadlyCells);
+        if (torchRoomCollisionTilemap != null) CacheTiles(torchRoomCollisionTilemap, deadlyCells);
+        if (torchDoorCollisionTilemap != null) CacheTiles(torchDoorCollisionTilemap, deadlyCells);
     }
 
     void Start()
@@ -55,7 +54,7 @@ public class GridManager : MonoBehaviour
             {
                 var t = Instantiate(tilePrefab, new Vector3(x, y), quaternion.identity);
                 t.name = $"Tile {x} {y}";
-                t.Init(((x % 2 == 0) ^ (y % 2 == 0)), new Vector2Int(x, y));
+                t.Init((x % 2 == 0) ^ (y % 2 == 0), new Vector2Int(x, y));
             }
     }
 
@@ -69,7 +68,7 @@ public class GridManager : MonoBehaviour
 
     public void ClearHighlights()
     {
-        var tiles = Object.FindObjectsByType<Tile>(FindObjectsSortMode.None);
+        var tiles = FindObjectsByType<Tile>(FindObjectsSortMode.None);
         foreach (var tile in tiles)
             tile.HideHighlight();
     }
