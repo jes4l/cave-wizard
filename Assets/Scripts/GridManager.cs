@@ -12,38 +12,46 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tilemap obstacleTilemap;
     [SerializeField] private Tilemap torchRoomCollisionTilemap;
     [SerializeField] private Tilemap torchDoorCollisionTilemap;
+    [SerializeField] private Tilemap torchDoorTilemap;
 
     private PlayerController player;
     private readonly HashSet<Vector2Int> blockedCells = new();
     private readonly HashSet<Vector2Int> deadlyCells = new();
+    private readonly HashSet<Vector2Int> doorCells = new();
 
     void Awake()
     {
-        obstacleTilemap    ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
-        torchRoomCollisionTilemap   ??= GameObject.Find("TilemapTorchRoomCollision")?.GetComponent<Tilemap>();
-        torchDoorCollisionTilemap   ??= GameObject.Find("TilemapTorchDoorCollision")?.GetComponent<Tilemap>();
+        obstacleTilemap           ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
+        torchRoomCollisionTilemap ??= GameObject.Find("TilemapTorchRoomCollision")?.GetComponent<Tilemap>();
+        torchDoorCollisionTilemap ??= GameObject.Find("TilemapTorchRoomDoorCollisions")?.GetComponent<Tilemap>();
+        torchDoorTilemap          ??= GameObject.Find("TilemapTorchRoomDoor")?.GetComponent<Tilemap>();
 
-        if (obstacleTilemap != null) CacheTiles(obstacleTilemap, blockedCells);
-        if (torchRoomCollisionTilemap != null) CacheTiles(torchRoomCollisionTilemap, deadlyCells);
-        if (torchDoorCollisionTilemap != null) CacheTiles(torchDoorCollisionTilemap, deadlyCells);
+        if (obstacleTilemap != null)
+            CacheTiles(obstacleTilemap, blockedCells);
+
+        if (torchRoomCollisionTilemap != null)
+            CacheTiles(torchRoomCollisionTilemap, deadlyCells);
+
+        if (torchDoorCollisionTilemap != null)
+            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
     }
 
     void Start()
     {
         GenerateGrid();
         RespawnPlayer();
-        cam.position = new Vector3(width * 0.5f - 0.5f, height * 0.5f - 0.5f, -10f);
+        cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
     }
 
-    private void CacheTiles(Tilemap map, HashSet<Vector2Int> set)
+    private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null)
     {
-        var bounds = map.cellBounds;
-        foreach (var cell in bounds.allPositionsWithin)
+        foreach (var cell in map.cellBounds.allPositionsWithin)
         {
             if (map.GetTile(cell) == null) continue;
-            var worldPos = map.CellToWorld(cell) + map.tileAnchor;
-            var gp = new Vector2Int(Mathf.RoundToInt(worldPos.x), Mathf.RoundToInt(worldPos.y));
-            set.Add(gp);
+            var world = map.CellToWorld(cell) + map.tileAnchor;
+            var gp = new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
+            primary.Add(gp);
+            secondary?.Add(gp);
         }
     }
 
@@ -68,17 +76,32 @@ public class GridManager : MonoBehaviour
 
     public void ClearHighlights()
     {
-        var tiles = FindObjectsByType<Tile>(FindObjectsSortMode.None);
-        foreach (var tile in tiles)
+        foreach (var tile in FindObjectsByType<Tile>(FindObjectsSortMode.None))
             tile.HideHighlight();
     }
 
-
     public void RespawnPlayer()
     {
-        if (player != null)
-            Destroy(player.gameObject);
+        if (player != null) Destroy(player.gameObject);
         player = Instantiate(playerPrefab);
         player.Init(new Vector2Int(3, 4), this);
+    }
+
+    public void OpenTorchRoomDoor()
+    {
+        if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(false);
+        if (torchDoorCollisionTilemap != null) torchDoorCollisionTilemap.gameObject.SetActive(false);
+        foreach (var cell in doorCells)
+            deadlyCells.Remove(cell);
+    }
+
+    public void CloseTorchRoomDoor()
+    {
+        if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(true);
+        if (torchDoorCollisionTilemap != null)
+        {
+            torchDoorCollisionTilemap.gameObject.SetActive(true);
+            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
+        }
     }
 }
