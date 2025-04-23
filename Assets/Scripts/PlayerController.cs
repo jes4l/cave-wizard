@@ -1,7 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private struct MoveRecord
+    {
+        public Vector2Int Position;
+        public float      DeltaTime;
+
+        public MoveRecord(Vector2Int position, float deltaTime)
+        {
+            Position  = position;
+            DeltaTime = deltaTime;
+        }
+    }
+
     public static PlayerController Instance { get; private set; }
 
     private int energy = 100;
@@ -11,20 +24,27 @@ public class PlayerController : MonoBehaviour
     private GridManager gridManager;
     private static readonly Vector2Int ButtonPos = new Vector2Int(7, 1);
 
-    private void Awake() => Instance = this;
+    private readonly List<MoveRecord> moveHistory = new();
+    private float lastMoveTime;
+
+    private void Awake()
+    {
+        Instance     = this;
+        lastMoveTime = Time.time;
+    }
 
     public void Init(Vector2Int startPos, GridManager gm)
     {
-        gridPosition = startPos;
-        gridManager = gm;
+        gridPosition  = startPos;
+        gridManager   = gm;
         transform.position = new Vector3(startPos.x, startPos.y, -1f);
     }
 
-    void Update()
+    private void Update()
     {
         if (gridManager == null || !HasEnergy) return;
 
-        var move = Vector2Int.zero;
+        Vector2Int move = Vector2Int.zero;
         if (Input.GetKeyDown(KeyCode.UpArrow))    move.y = +1;
         if (Input.GetKeyDown(KeyCode.DownArrow))  move.y = -1;
         if (Input.GetKeyDown(KeyCode.LeftArrow))  move.x = -1;
@@ -36,7 +56,7 @@ public class PlayerController : MonoBehaviour
 
     public void MoveTo(Vector2Int target)
     {
-        var wasOnButton = gridPosition == ButtonPos;
+        bool wasOnButton = gridPosition == ButtonPos;
 
         if (!HasEnergy)
         {
@@ -58,12 +78,20 @@ public class PlayerController : MonoBehaviour
         }
 
         gridManager.ClearHighlights();
-        gridPosition = target;
+
+        // record move timing
+        float now        = Time.time;
+        float delta      = now - lastMoveTime;
+        lastMoveTime     = now;
+        moveHistory.Add(new MoveRecord(target, delta));
+
+        // execute move
+        gridPosition     = target;
         transform.position = new Vector3(target.x, target.y, -1f);
         energy--;
-        Debug.Log($"Player moved to {gridPosition}. Energy: {energy}");
+        Debug.Log($"Player moved to {gridPosition} (Δt = {delta:F2}s). Energy: {energy}");
 
-        var isOnButton = target == ButtonPos;
+        bool isOnButton = gridPosition == ButtonPos;
         if (isOnButton)
             gridManager.OpenTorchRoomDoor();
         else if (wasOnButton)
