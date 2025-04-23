@@ -1,10 +1,11 @@
+// PlayerController.cs
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance { get; private set; }
 
-    private int energy = 10;
+    private int energy = 100;
     public bool HasEnergy => energy > 0;
 
     private Vector2Int _gridPosition;
@@ -17,22 +18,21 @@ public class PlayerController : MonoBehaviour
     {
         _gridPosition = startPos;
         _gridManager = gridManager;
-        transform.position = new Vector3(startPos.x, startPos.y, -1);
+        transform.position = new Vector3(startPos.x, startPos.y, -1f);
     }
 
     void Update()
     {
-        if (_gridManager == null || !HasEnergy) 
-            return;
+        if (_gridManager == null || !HasEnergy) return;
 
-        var m = Vector2Int.zero;
-        if (Input.GetKeyDown(KeyCode.UpArrow))    m.y = +1;
-        if (Input.GetKeyDown(KeyCode.DownArrow))  m.y = -1;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))  m.x = -1;
-        if (Input.GetKeyDown(KeyCode.RightArrow)) m.x = +1;
+        var move = Vector2Int.zero;
+        if (Input.GetKeyDown(KeyCode.UpArrow))    move.y = +1;
+        if (Input.GetKeyDown(KeyCode.DownArrow))  move.y = -1;
+        if (Input.GetKeyDown(KeyCode.LeftArrow))  move.x = -1;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) move.x = +1;
 
-        if (m != Vector2Int.zero)
-            MoveTo(_gridPosition + m);
+        if (move != Vector2Int.zero)
+            MoveTo(_gridPosition + move);
     }
 
     public void MoveTo(Vector2Int target)
@@ -49,9 +49,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (_gridManager.IsDeadly(target))
+        {
+            Debug.Log($"Entered deadly tile at {target} – respawning.");
+            _gridManager.RespawnPlayer();
+            return;
+        }
+
         _gridManager.ClearHighlights();
         _gridPosition = target;
-        transform.position = new Vector3(target.x, target.y, -1);
+        transform.position = new Vector3(target.x, target.y, -1f);
         energy--;
         Debug.Log($"Player moved to {_gridPosition}. Energy: {energy}");
     }
