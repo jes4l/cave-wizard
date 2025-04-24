@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    private struct MoveRecord
+    public struct MoveRecord
     {
         public Vector2Int Position;
         public float      DeltaTime;
@@ -17,20 +18,23 @@ public class PlayerController : MonoBehaviour
 
     public static PlayerController Instance { get; private set; }
 
-    private int energy = 100;
+    public int energy = 0;
     public bool HasEnergy => energy > 0;
 
     private Vector2Int gridPosition;
     private GridManager gridManager;
     private static readonly Vector2Int ButtonPos = new Vector2Int(7, 1);
 
-    private readonly List<MoveRecord> moveHistory = new();
+    public List<MoveRecord> moveHistory = new();
     private float lastMoveTime;
+
+    public bool ghost = false;
 
     private void Awake()
     {
         Instance     = this;
         lastMoveTime = Time.time;
+        energy = 10;
     }
 
     public void Init(Vector2Int startPos, GridManager gm)
@@ -42,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (ghost) return;
         if (gridManager == null || !HasEnergy) return;
 
         Vector2Int move = Vector2Int.zero;
@@ -53,6 +58,18 @@ public class PlayerController : MonoBehaviour
         if (move != Vector2Int.zero)
             MoveTo(gridPosition + move);
     }
+
+    public void GhostInit() => StartCoroutine(Walk());
+    
+    private IEnumerator Walk()
+    {
+        foreach (MoveRecord mr in moveHistory)
+        {           
+            Debug.Log("del: " + mr.DeltaTime + ", pos: " + mr.Position);
+            yield return new WaitForSeconds(mr.DeltaTime);
+            MoveTo(mr.Position);
+        }
+    }    
 
     public void MoveTo(Vector2Int target)
     {
@@ -73,7 +90,7 @@ public class PlayerController : MonoBehaviour
         if (gridManager.IsDeadly(target))
         {
             Debug.Log($"Entered deadly tile at {target} – respawning.");
-            gridManager.RespawnPlayer();
+            if (!ghost) gridManager.RespawnPlayer();
             return;
         }
 
@@ -83,7 +100,8 @@ public class PlayerController : MonoBehaviour
         float now        = Time.time;
         float delta      = now - lastMoveTime;
         lastMoveTime     = now;
-        moveHistory.Add(new MoveRecord(target, delta));
+        if (!ghost) moveHistory.Add(new MoveRecord(target, delta));
+        Debug.Log($"History: {target}, {delta}");
 
         // execute move
         gridPosition     = target;

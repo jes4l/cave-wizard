@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
@@ -13,11 +15,20 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tilemap torchRoomCollisionTilemap;
     [SerializeField] private Tilemap torchDoorCollisionTilemap;
     [SerializeField] private Tilemap torchDoorTilemap;
+    [SerializeField] private TextMeshProUGUI energyText;
+
+
 
     private PlayerController player;
     private readonly HashSet<Vector2Int> blockedCells = new();
     private readonly HashSet<Vector2Int> deadlyCells = new();
     private readonly HashSet<Vector2Int> doorCells = new();
+      
+
+    private List<PlayerController> ghosts = new List<PlayerController>();
+    private List<PlayerController> ghostsOld = new List<PlayerController>();
+
+
 
     void Awake()
     {
@@ -41,6 +52,11 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         RespawnPlayer();
         cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
+    }
+
+    void Update()
+    {
+        energyText.text = player.energy.ToString();
     }
 
     private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null)
@@ -79,12 +95,47 @@ public class GridManager : MonoBehaviour
         foreach (var tile in FindObjectsByType<Tile>(FindObjectsSortMode.None))
             tile.HideHighlight();
     }
-
+        
     public void RespawnPlayer()
     {
-        if (player != null) Destroy(player.gameObject);
+        if (player != null) 
+        {        
+        player.gameObject.GetComponent<PlayerController>().ghost = true;
+        ghosts.Add(player.gameObject.GetComponent<PlayerController>());
+        
+        player.gameObject.SetActive(false);
+        foreach (PlayerController ghostPrefab in ghostsOld)
+            ghostPrefab.gameObject.SetActive(false);
+        }
+
         player = Instantiate(playerPrefab);
         player.Init(new Vector2Int(3, 4), this);
+        player.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+
+        foreach (PlayerController ghostPrefab in ghosts)
+        {
+            PlayerController ghost = Instantiate(ghostPrefab);
+            ghost.Init(new Vector2Int(3, 4), this);
+            ghost.moveHistory = new List<PlayerController.MoveRecord>(ghostPrefab.moveHistory);
+
+            ghost.GetComponent<SpriteRenderer>().sortingOrder = 0;
+            ghost.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+
+            ghost.gameObject.SetActive(true);
+            ghost.GhostInit();
+            ghostsOld.Add(ghost);
+        }
+    }
+
+    public void Restart()
+    {
+        if (player != null)
+            player.gameObject.SetActive(false);
+
+        ghosts = new List<PlayerController>();
+        ghostsOld = new List<PlayerController>();
+
     }
 
     public void OpenTorchRoomDoor()
