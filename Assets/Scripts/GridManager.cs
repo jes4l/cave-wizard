@@ -20,6 +20,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tilemap buttonTilemap;
     private Vector2Int buttonPosition;
 
+    [SerializeField] private GemManager gemManager;
+
     private PlayerController player;
     private readonly HashSet<Vector2Int> blockedCells = new();
     private readonly HashSet<Vector2Int> deadlyCells = new();
@@ -30,11 +32,13 @@ public class GridManager : MonoBehaviour
 
     void Awake()
     {
+        gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
+
         obstacleTilemap           ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
         torchRoomCollisionTilemap ??= GameObject.Find("TilemapTorchRoomCollision")?.GetComponent<Tilemap>();
         torchDoorCollisionTilemap ??= GameObject.Find("TilemapTorchRoomDoorCollisions")?.GetComponent<Tilemap>();
         torchDoorTilemap          ??= GameObject.Find("TilemapTorchRoomDoor")?.GetComponent<Tilemap>();
-        buttonTilemap             ??= GameObject.Find("TilemapButton")?.GetComponent<Tilemap>();  // ⇧ added
+        buttonTilemap             ??= GameObject.Find("TilemapButton")?.GetComponent<Tilemap>();
 
         if (obstacleTilemap != null)
             CacheTiles(obstacleTilemap, blockedCells);
@@ -113,6 +117,8 @@ public class GridManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
+        gemManager?.ResetGems();
+
         CloseTorchRoomDoor();
         if (player != null)
         {
@@ -146,6 +152,8 @@ public class GridManager : MonoBehaviour
 
     public void Restart()
     {
+        gemManager?.ResetGems();
+
         CloseTorchRoomDoor();
         if (player != null)
             player.gameObject.SetActive(false);

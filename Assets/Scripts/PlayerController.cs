@@ -97,10 +97,34 @@ public class PlayerController : MonoBehaviour
         float delta  = now - lastMoveTime;
         lastMoveTime = now;
         if (!ghost) moveHistory.Add(new MoveRecord(target, delta));
-        Debug.Log($"History: {target}, {delta}");
+        // Debug.Log($"History: {target}, {delta}");
 
         gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1f);
+
+        Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Gem1"))
+            {
+                energy += 2;
+                hit.tag = "Untagged";
+                hit.gameObject.SetActive(false);
+            }
+            else if (hit.CompareTag("Gem2"))
+            {
+                energy += 3;
+                hit.tag = "Untagged";
+                hit.gameObject.SetActive(false);
+            }
+            else if (hit.CompareTag("Gem3"))
+            {
+                energy += 4;
+                hit.tag = "Untagged";
+                hit.gameObject.SetActive(false);
+            }
+        }
+
         energy--;
         Debug.Log($"Player moved to {gridPosition} (Δt = {delta:F2}s). Energy: {energy}");
 

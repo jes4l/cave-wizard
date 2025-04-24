@@ -1625,6 +1625,7 @@ MonoBehaviour:
   torchDoorCollisionTilemap: {fileID: 1203738489}
   torchDoorTilemap: {fileID: 1649044087}
   energyText: {fileID: 466818820}
+  buttonTilemap: {fileID: 2063965794}
 --- !u!4 &1116084822
 Transform:
   m_ObjectHideFlags: 0
