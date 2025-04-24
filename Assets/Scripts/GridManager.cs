@@ -134,6 +134,8 @@ public class GridManager : MonoBehaviour
         player.Init(new Vector2Int(3, 4), this);
         player.GetComponent<SpriteRenderer>().sortingOrder = 1;
         player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        player.energy -= ghosts.Count;
+        if (player.energy < 0) player.energy = 0;
 
         foreach (PlayerController ghostPrefab in ghosts)
         {
