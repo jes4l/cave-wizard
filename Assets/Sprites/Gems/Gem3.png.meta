@@ -103,10 +103,10 @@ TextureImporter:
       name: Gem3_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 3
         y: 0
-        width: 44
-        height: 48
+        width: 58
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,8 +130,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Gem3_0: 1176398022949359563
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
