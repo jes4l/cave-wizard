@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2Int gridPosition;
     private GridManager gridManager;
-    private static readonly Vector2Int ButtonPos = new Vector2Int(7, 1);
+    private Vector2Int buttonPos;
 
     public List<MoveRecord> moveHistory = new();
     private float lastMoveTime;
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
         gridPosition  = startPos;
         gridManager   = gm;
         transform.position = new Vector3(startPos.x, startPos.y, -1f);
+        buttonPos     = gridManager.GetButtonPosition();
     }
 
     private void Update()
@@ -60,33 +61,29 @@ public class PlayerController : MonoBehaviour
     }
 
     public void GhostInit() => StartCoroutine(Walk());
-    
+
     private IEnumerator Walk()
     {
         foreach (MoveRecord mr in moveHistory)
-        {           
-            Debug.Log("del: " + mr.DeltaTime + ", pos: " + mr.Position);
+        {
             yield return new WaitForSeconds(mr.DeltaTime);
             MoveTo(mr.Position);
         }
-    }    
+    }
 
     public void MoveTo(Vector2Int target)
     {
-        bool wasOnButton = gridPosition == ButtonPos;
-
+        bool wasOnButton = gridPosition == buttonPos;
         if (!HasEnergy)
         {
             Debug.Log("No energy left – cannot move.");
             return;
         }
-
         if (!gridManager.IsPositionValid(target))
         {
             Debug.Log("Tried to move to invalid tile.");
             return;
         }
-
         if (gridManager.IsDeadly(target))
         {
             Debug.Log($"Entered deadly tile at {target} – respawning.");
@@ -96,20 +93,18 @@ public class PlayerController : MonoBehaviour
 
         gridManager.ClearHighlights();
 
-        // record move timing
-        float now        = Time.time;
-        float delta      = now - lastMoveTime;
-        lastMoveTime     = now;
+        float now    = Time.time;
+        float delta  = now - lastMoveTime;
+        lastMoveTime = now;
         if (!ghost) moveHistory.Add(new MoveRecord(target, delta));
         Debug.Log($"History: {target}, {delta}");
 
-        // execute move
-        gridPosition     = target;
+        gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1f);
         energy--;
         Debug.Log($"Player moved to {gridPosition} (Δt = {delta:F2}s). Energy: {energy}");
 
-        bool isOnButton = gridPosition == ButtonPos;
+        bool isOnButton = gridPosition == buttonPos;
         if (isOnButton)
             gridManager.OpenTorchRoomDoor();
         else if (wasOnButton)

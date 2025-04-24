@@ -17,18 +17,16 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tilemap torchDoorTilemap;
     [SerializeField] private TextMeshProUGUI energyText;
 
-
+    [SerializeField] private Tilemap buttonTilemap;
+    private Vector2Int buttonPosition;
 
     private PlayerController player;
     private readonly HashSet<Vector2Int> blockedCells = new();
     private readonly HashSet<Vector2Int> deadlyCells = new();
     private readonly HashSet<Vector2Int> doorCells = new();
-      
 
     private List<PlayerController> ghosts = new List<PlayerController>();
     private List<PlayerController> ghostsOld = new List<PlayerController>();
-
-
 
     void Awake()
     {
@@ -36,6 +34,7 @@ public class GridManager : MonoBehaviour
         torchRoomCollisionTilemap ??= GameObject.Find("TilemapTorchRoomCollision")?.GetComponent<Tilemap>();
         torchDoorCollisionTilemap ??= GameObject.Find("TilemapTorchRoomDoorCollisions")?.GetComponent<Tilemap>();
         torchDoorTilemap          ??= GameObject.Find("TilemapTorchRoomDoor")?.GetComponent<Tilemap>();
+        buttonTilemap             ??= GameObject.Find("TilemapButton")?.GetComponent<Tilemap>();  // ⇧ added
 
         if (obstacleTilemap != null)
             CacheTiles(obstacleTilemap, blockedCells);
@@ -45,6 +44,9 @@ public class GridManager : MonoBehaviour
 
         if (torchDoorCollisionTilemap != null)
             CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
+
+        if (buttonTilemap != null)
+            CacheButtonPosition(buttonTilemap);
     }
 
     void Start()
@@ -71,6 +73,19 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void CacheButtonPosition(Tilemap map)
+    {
+        foreach (var cell in map.cellBounds.allPositionsWithin)
+        {
+            if (map.GetTile(cell) == null) continue;
+            var world = map.CellToWorld(cell) + map.tileAnchor;
+            buttonPosition = new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
+            break;
+        }
+    }
+
+    public Vector2Int GetButtonPosition() => buttonPosition;
+
     private void GenerateGrid()
     {
         for (int x = 0; x < width; x++)
@@ -95,18 +110,18 @@ public class GridManager : MonoBehaviour
         foreach (var tile in FindObjectsByType<Tile>(FindObjectsSortMode.None))
             tile.HideHighlight();
     }
-        
+
     public void RespawnPlayer()
     {
-         CloseTorchRoomDoor();
-        if (player != null) 
-        {        
-        player.gameObject.GetComponent<PlayerController>().ghost = true;
-        ghosts.Add(player.gameObject.GetComponent<PlayerController>());
-        
-        player.gameObject.SetActive(false);
-        foreach (PlayerController ghostPrefab in ghostsOld)
-            ghostPrefab.gameObject.SetActive(false);
+        CloseTorchRoomDoor();
+        if (player != null)
+        {
+            player.gameObject.GetComponent<PlayerController>().ghost = true;
+            ghosts.Add(player.gameObject.GetComponent<PlayerController>());
+
+            player.gameObject.SetActive(false);
+            foreach (PlayerController ghostPrefab in ghostsOld)
+                ghostPrefab.gameObject.SetActive(false);
         }
 
         player = Instantiate(playerPrefab);
@@ -149,7 +164,6 @@ public class GridManager : MonoBehaviour
         sr.sortingOrder = 1;
         sr.color = new Color(1, 1, 1, 1);
     }
-
 
     public void OpenTorchRoomDoor()
     {
