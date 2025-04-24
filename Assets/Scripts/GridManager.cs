@@ -98,6 +98,7 @@ public class GridManager : MonoBehaviour
         
     public void RespawnPlayer()
     {
+         CloseTorchRoomDoor();
         if (player != null) 
         {        
         player.gameObject.GetComponent<PlayerController>().ghost = true;
@@ -130,13 +131,25 @@ public class GridManager : MonoBehaviour
 
     public void Restart()
     {
+        CloseTorchRoomDoor();
         if (player != null)
             player.gameObject.SetActive(false);
 
-        ghosts = new List<PlayerController>();
-        ghostsOld = new List<PlayerController>();
+        foreach (var g in ghostsOld)
+            Destroy(g.gameObject);
+        ghostsOld.Clear();
 
+        foreach (var gp in ghosts)
+            Destroy(gp.gameObject);
+        ghosts.Clear();
+
+        player = Instantiate(playerPrefab);
+        player.Init(new Vector2Int(3, 4), this);
+        var sr = player.GetComponent<SpriteRenderer>();
+        sr.sortingOrder = 1;
+        sr.color = new Color(1, 1, 1, 1);
     }
+
 
     public void OpenTorchRoomDoor()
     {

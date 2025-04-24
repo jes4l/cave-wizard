@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d6cc637ef6f6d8840b1c6860509b5f3e
+guid: 153ad5aa2d9fe7746bce1333e4b3b111
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 649223268058989734
-    second: Button_0
+      213: -9009641426861971402
+    second: Restart_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_0
+      name: Restart_0
       rect:
         serializedVersion: 2
         x: 0
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6a403906f11820900800000000000000
-      internalID: 649223268058989734
+      spriteID: 638af3e7bd257f280800000000000000
+      internalID: -9009641426861971402
       vertices: []
       indices: 
       edges: []
