@@ -1,28 +1,24 @@
 using UnityEngine;
 
-public class Tile : MonoBehaviour
-{
+public class Tile : MonoBehaviour {
     [SerializeField] private Color _baseColor, _offsetColor;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
 
     private Vector2Int _gridPos;
 
-    public void Init(bool isOffset, Vector2Int gridPos)
-    {
+    public void Init(bool isOffset, Vector2Int gridPos) {
         _gridPos = gridPos;
         _renderer.color = isOffset ? _offsetColor : _baseColor;
     }
 
-    public void OnMouseOver()
-    {
+    public void OnMouseOver() {
         var p = PlayerController.Instance;
         if (p != null && p.HasEnergy && IsNextTo(p.GetGridPosition(), _gridPos))
             _highlight.SetActive(true);
     }
 
-    public void OnMouseDown()
-    {
+    public void OnMouseDown() {
         var p = PlayerController.Instance;
         if (p != null && p.HasEnergy && IsNextTo(p.GetGridPosition(), _gridPos))
             p.MoveTo(_gridPos);

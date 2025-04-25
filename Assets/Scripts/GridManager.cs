@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class GridManager : MonoBehaviour
-{
+public class GridManager : MonoBehaviour {
     [SerializeField] private int width, height;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform cam;
@@ -30,8 +29,7 @@ public class GridManager : MonoBehaviour
     private List<PlayerController> ghosts = new List<PlayerController>();
     private List<PlayerController> ghostsOld = new List<PlayerController>();
 
-    void Awake()
-    {
+    void Awake() {
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
 
         obstacleTilemap           ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
@@ -53,22 +51,18 @@ public class GridManager : MonoBehaviour
             CacheButtonPosition(buttonTilemap);
     }
 
-    void Start()
-    {
+    void Start() {
         GenerateGrid();
         RespawnPlayer();
         cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
     }
 
-    void Update()
-    {
+    void Update() {
         energyText.text = player.energy.ToString();
     }
 
-    private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null)
-    {
-        foreach (var cell in map.cellBounds.allPositionsWithin)
-        {
+    private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null) {
+        foreach (var cell in map.cellBounds.allPositionsWithin) {
             if (map.GetTile(cell) == null) continue;
             var world = map.CellToWorld(cell) + map.tileAnchor;
             var gp = new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
@@ -77,10 +71,8 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void CacheButtonPosition(Tilemap map)
-    {
-        foreach (var cell in map.cellBounds.allPositionsWithin)
-        {
+    private void CacheButtonPosition(Tilemap map) {
+        foreach (var cell in map.cellBounds.allPositionsWithin) {
             if (map.GetTile(cell) == null) continue;
             var world = map.CellToWorld(cell) + map.tileAnchor;
             buttonPosition = new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
@@ -90,8 +82,7 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int GetButtonPosition() => buttonPosition;
 
-    private void GenerateGrid()
-    {
+    private void GenerateGrid() {
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
@@ -109,19 +100,16 @@ public class GridManager : MonoBehaviour
     public bool IsDeadly(Vector2Int pos) =>
         deadlyCells.Contains(pos);
 
-    public void ClearHighlights()
-    {
+    public void ClearHighlights() {
         foreach (var tile in FindObjectsByType<Tile>(FindObjectsSortMode.None))
             tile.HideHighlight();
     }
 
-    public void RespawnPlayer()
-    {
+    public void RespawnPlayer() {
         gemManager?.ResetGems();
 
         CloseTorchRoomDoor();
-        if (player != null)
-        {
+        if (player != null) {
             player.gameObject.GetComponent<PlayerController>().ghost = true;
             ghosts.Add(player.gameObject.GetComponent<PlayerController>());
 
@@ -137,8 +125,7 @@ public class GridManager : MonoBehaviour
         player.energy -= ghosts.Count;
         if (player.energy < 0) player.energy = 0;
 
-        foreach (PlayerController ghostPrefab in ghosts)
-        {
+        foreach (PlayerController ghostPrefab in ghosts) {
             PlayerController ghost = Instantiate(ghostPrefab);
             ghost.Init(new Vector2Int(3, 4), this);
             ghost.moveHistory = new List<PlayerController.MoveRecord>(ghostPrefab.moveHistory);
@@ -152,8 +139,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void Restart()
-    {
+    public void Restart() {
         gemManager?.ResetGems();
 
         CloseTorchRoomDoor();
@@ -175,21 +161,27 @@ public class GridManager : MonoBehaviour
         sr.color = new Color(1, 1, 1, 1);
     }
 
-    public void OpenTorchRoomDoor()
-    {
+    public void OpenTorchRoomDoor() {
         if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(false);
         if (torchDoorCollisionTilemap != null) torchDoorCollisionTilemap.gameObject.SetActive(false);
         foreach (var cell in doorCells)
             deadlyCells.Remove(cell);
+        if (buttonTilemap != null) {
+            Color c    = buttonTilemap.color;
+            c.a        = 0.5f;
+            buttonTilemap.color = c;
+        }
     }
 
-    public void CloseTorchRoomDoor()
-    {
+    public void CloseTorchRoomDoor() {
         if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(true);
-        if (torchDoorCollisionTilemap != null)
-        {
+        if (torchDoorCollisionTilemap != null){
             torchDoorCollisionTilemap.gameObject.SetActive(true);
-            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
+            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);}
+        if (buttonTilemap != null) {
+            Color c    = buttonTilemap.color;
+            c.a        = 1f;
+            buttonTilemap.color = c;
         }
     }
 }

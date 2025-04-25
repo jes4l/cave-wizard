@@ -2,15 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour
-{
-    public struct MoveRecord
-    {
+public class PlayerController : MonoBehaviour {
+    public struct MoveRecord {
         public Vector2Int Position;
         public float      DeltaTime;
 
-        public MoveRecord(Vector2Int position, float deltaTime)
-        {
+        public MoveRecord(Vector2Int position, float deltaTime){
             Position  = position;
             DeltaTime = deltaTime;
         }
@@ -30,23 +27,20 @@ public class PlayerController : MonoBehaviour
 
     public bool ghost = false;
 
-    private void Awake()
-    {
+    private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
         energy = 10;
     }
 
-    public void Init(Vector2Int startPos, GridManager gm)
-    {
+    public void Init(Vector2Int startPos, GridManager gm) {
         gridPosition  = startPos;
         gridManager   = gm;
         transform.position = new Vector3(startPos.x, startPos.y, -1f);
         buttonPos     = gridManager.GetButtonPosition();
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (ghost) return;
         if (gridManager == null || !HasEnergy) return;
 
@@ -62,8 +56,7 @@ public class PlayerController : MonoBehaviour
 
     public void GhostInit() => StartCoroutine(Walk());
 
-    private IEnumerator Walk()
-    {
+    private IEnumerator Walk() {
         foreach (MoveRecord mr in moveHistory)
         {
             yield return new WaitForSeconds(mr.DeltaTime);
@@ -71,21 +64,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void MoveTo(Vector2Int target)
-    {
+    public void MoveTo(Vector2Int target) {
         bool wasOnButton = gridPosition == buttonPos;
-        if (!HasEnergy)
-        {
+        if (!HasEnergy){
             Debug.Log("No energy left – cannot move.");
             return;
         }
-        if (!gridManager.IsPositionValid(target))
-        {
+        if (!gridManager.IsPositionValid(target)){
             Debug.Log("Tried to move to invalid tile.");
             return;
         }
-        if (gridManager.IsDeadly(target))
-        {
+        if (gridManager.IsDeadly(target)){
             Debug.Log($"Entered deadly tile at {target} – respawning.");
             if (!ghost) gridManager.RespawnPlayer();
             return;
@@ -103,22 +92,18 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(target.x, target.y, -1f);
 
         Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
-        foreach (var hit in hits)
-        {
-            if (hit.CompareTag("Gem1"))
-            {
+        foreach (var hit in hits) {
+            if (hit.CompareTag("Gem1")) {
                 energy += 2;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
-            else if (hit.CompareTag("Gem2"))
-            {
+            else if (hit.CompareTag("Gem2")) {
                 energy += 3;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
-            else if (hit.CompareTag("Gem3"))
-            {
+            else if (hit.CompareTag("Gem3")) {
                 energy += 4;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
@@ -132,8 +117,7 @@ public class PlayerController : MonoBehaviour
         if (isOnButton)
             gridManager.OpenTorchRoomDoor();
         else if (wasOnButton)
-            gridManager.CloseTorchRoomDoor();
-    }
+            gridManager.CloseTorchRoomDoor(); }
 
     public Vector2Int GetGridPosition() => gridPosition;
 }

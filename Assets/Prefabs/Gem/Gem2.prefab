@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7cf0458126c55a45a1869a110d45a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 0.2
+  amplitude: 0.15
   frequency: 1
 --- !u!61 &718983165731809998
 BoxCollider2D:
