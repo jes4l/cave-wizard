@@ -11,6 +11,7 @@ public class GemManager : MonoBehaviour {
     private readonly HashSet<Vector2Int> _occupied = new();
 
     int[,,] gemSpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
+                              {{3, 7}, {8, 5}, {10, 2}},
                               {{3, 7}, {8, 5}, {10, 2}}}; //...
 
     void Start() {
