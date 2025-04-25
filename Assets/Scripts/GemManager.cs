@@ -10,29 +10,28 @@ public class GemManager : MonoBehaviour {
     private readonly List<GameObject> _allGems = new();
     private readonly HashSet<Vector2Int> _occupied = new();
 
+    int[,,] gemSpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
+                              {{3, 7}, {8, 5}, {10, 2}}}; //...
+
     void Start() {
-        SpawnGem(_gem1Prefab, 1, 3, 5, 7);
-        SpawnGem(_gem2Prefab, 7, 9, 0, 2);
-        SpawnGem(_gem3Prefab, 11, 14, 2, 3);
+        GameObject[] gems = {_gem1Prefab, _gem2Prefab, _gem3Prefab};
+
+        for (int i = 0; i < 3; i++)
+        {
+            int a = gemSpawnPoints[GridManager.levelNumber, i, 0],
+                b = gemSpawnPoints[GridManager.levelNumber, i, 1];
+            SpawnGem(gems[i], a, b);
+        }
     }
 
-    private void SpawnGem(GameObject prefab, int xMin, int xMax, int yMin, int yMax) {
-        Vector2Int buttonPos = _gridManager.GetButtonPosition();
-        Vector2Int pos;
-        do {
-            pos = new Vector2Int(
-                Random.Range(xMin, xMax + 1),
-                Random.Range(yMin, yMax + 1)
-            );
-        }
-        while (!_gridManager.IsPositionValid(pos)
-               || _occupied.Contains(pos)
-               || pos == buttonPos);
-
+        private void SpawnGem(GameObject prefab, int x, int y)
+    {
+        Vector2Int pos = new Vector2Int(x, y);
         var gem = Instantiate(prefab, new Vector3(pos.x, pos.y, -1f), Quaternion.identity);
         _allGems.Add(gem);
         _occupied.Add(pos);
     }
+
 
     public void ResetGems() {
         foreach (var gem in _allGems) {

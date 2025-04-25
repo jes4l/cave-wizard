@@ -36,6 +36,10 @@ public class GridManager : MonoBehaviour {
 
     public Vector2Int GetTorchPosition() => torchPosition;
 
+    private int[,] spawnPoints = {{3, 4}, {13, 0}};
+
+    public static int levelNumber = 0;
+
     void Awake() {
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
 
@@ -137,8 +141,11 @@ public class GridManager : MonoBehaviour {
                 ghostPrefab.gameObject.SetActive(false);
         }
 
+        Vector2Int spawn = 
+            new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
+
         player = Instantiate(playerPrefab);
-        player.Init(new Vector2Int(3, 4), this);
+        player.Init(spawn, this);
         player.GetComponent<SpriteRenderer>().sortingOrder = 1;
         player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         player.energy -= ghosts.Count;
@@ -146,7 +153,7 @@ public class GridManager : MonoBehaviour {
 
         foreach (PlayerController ghostPrefab in ghosts) {
             PlayerController ghost = Instantiate(ghostPrefab);
-            ghost.Init(new Vector2Int(3, 4), this);
+            ghost.Init(spawn, this);
             ghost.moveHistory = new List<PlayerController.MoveRecord>(ghostPrefab.moveHistory);
 
             ghost.GetComponent<SpriteRenderer>().sortingOrder = 0;
@@ -173,8 +180,11 @@ public class GridManager : MonoBehaviour {
             Destroy(gp.gameObject);
         ghosts.Clear();
 
+        Vector2Int spawn = 
+            new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
+
         player = Instantiate(playerPrefab);
-        player.Init(new Vector2Int(3, 4), this);
+        player.Init(spawn, this);
         var sr = player.GetComponent<SpriteRenderer>();
         sr.sortingOrder = 1;
         sr.color = new Color(1, 1, 1, 1);

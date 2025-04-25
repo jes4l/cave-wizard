@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     public struct MoveRecord {
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
-        energy = 10;
+        energy = 100;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
@@ -92,22 +93,25 @@ public class PlayerController : MonoBehaviour {
         transform.position = new Vector3(target.x, target.y, -1f);
 
         if (gridPosition == gridManager.GetTorchPosition())
-            Debug.Log("Level1 Complete");
+        {
+            GridManager.levelNumber++;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
 
         Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
         foreach (var hit in hits) {
             if (hit.CompareTag("Gem1")) {
-                energy += 2;
-                hit.tag = "Untagged";
-                hit.gameObject.SetActive(false);
-            }
-            else if (hit.CompareTag("Gem2")) {
                 energy += 3;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
+            else if (hit.CompareTag("Gem2")) {
+                energy += 5;
+                hit.tag = "Untagged";
+                hit.gameObject.SetActive(false);
+            }
             else if (hit.CompareTag("Gem3")) {
-                energy += 4;
+                energy += 7;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
