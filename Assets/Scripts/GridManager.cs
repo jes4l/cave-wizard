@@ -29,6 +29,7 @@ public class GridManager : MonoBehaviour {
     private readonly HashSet<Vector2Int> blockedCells = new();
     private readonly HashSet<Vector2Int> deadlyCells = new();
     private readonly HashSet<Vector2Int> doorCells = new();
+    private readonly HashSet<Vector2Int> enemyCells = new();
 
     private List<PlayerController> ghosts = new List<PlayerController>();
     private List<PlayerController> ghostsOld = new List<PlayerController>();
@@ -71,7 +72,7 @@ public class GridManager : MonoBehaviour {
     void Start() {
         GenerateGrid();
         RespawnPlayer();
-        cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
+        //cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
     }
 
     void Update() {
@@ -119,7 +120,14 @@ public class GridManager : MonoBehaviour {
     public bool IsPositionValid(Vector2Int pos) =>
         pos.x >= 0 && pos.x < width &&
         pos.y >= 0 && pos.y < height &&
-        !blockedCells.Contains(pos);
+        !blockedCells.Contains(pos) &&
+        !enemyCells.Contains(pos);
+
+    public void RegisterEnemyCell(Vector2Int pos) =>
+        enemyCells.Add(pos);
+    public void UnregisterEnemyCell(Vector2Int pos) =>
+        enemyCells.Remove(pos);
+
 
     public bool IsDeadly(Vector2Int pos) =>
         deadlyCells.Contains(pos);
