@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
-        energy = 10;
+        energy = 100;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
@@ -91,6 +91,9 @@ public class PlayerController : MonoBehaviour {
         gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1f);
 
+        if (gridPosition == gridManager.GetTorchPosition())
+            Debug.Log("Level1 Complete");
+
         Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
         foreach (var hit in hits) {
             if (hit.CompareTag("Gem1")) {
@@ -117,7 +120,8 @@ public class PlayerController : MonoBehaviour {
         if (isOnButton)
             gridManager.OpenTorchRoomDoor();
         else if (wasOnButton)
-            gridManager.CloseTorchRoomDoor(); }
+            gridManager.CloseTorchRoomDoor();
+    }
 
     public Vector2Int GetGridPosition() => gridPosition;
 }

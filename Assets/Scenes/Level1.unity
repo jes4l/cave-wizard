@@ -1617,6 +1617,7 @@ MonoBehaviour:
   torchDoorTilemap: {fileID: 1649044087}
   energyText: {fileID: 466818820}
   buttonTilemap: {fileID: 2063965794}
+  torchTilemap: {fileID: 799816279}
   gemManager: {fileID: 1128824944}
 --- !u!4 &1116084822
 Transform:

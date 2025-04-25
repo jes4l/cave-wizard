@@ -19,6 +19,9 @@ public class GridManager : MonoBehaviour {
     [SerializeField] private Tilemap buttonTilemap;
     private Vector2Int buttonPosition;
 
+    [SerializeField] private Tilemap torchTilemap;
+    private Vector2Int torchPosition;
+
     [SerializeField] private GemManager gemManager;
 
     private PlayerController player;
@@ -29,6 +32,10 @@ public class GridManager : MonoBehaviour {
     private List<PlayerController> ghosts = new List<PlayerController>();
     private List<PlayerController> ghostsOld = new List<PlayerController>();
 
+    public Vector2Int GetButtonPosition() => buttonPosition;
+
+    public Vector2Int GetTorchPosition() => torchPosition;
+
     void Awake() {
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
 
@@ -37,6 +44,7 @@ public class GridManager : MonoBehaviour {
         torchDoorCollisionTilemap ??= GameObject.Find("TilemapTorchRoomDoorCollisions")?.GetComponent<Tilemap>();
         torchDoorTilemap          ??= GameObject.Find("TilemapTorchRoomDoor")?.GetComponent<Tilemap>();
         buttonTilemap             ??= GameObject.Find("TilemapButton")?.GetComponent<Tilemap>();
+        torchTilemap              ??= GameObject.Find("TilemapTorch")?.GetComponent<Tilemap>();
 
         if (obstacleTilemap != null)
             CacheTiles(obstacleTilemap, blockedCells);
@@ -49,6 +57,9 @@ public class GridManager : MonoBehaviour {
 
         if (buttonTilemap != null)
             CacheButtonPosition(buttonTilemap);
+
+        if (torchTilemap != null)
+            CacheSingleTilePosition(torchTilemap, out torchPosition);
     }
 
     void Start() {
@@ -80,7 +91,15 @@ public class GridManager : MonoBehaviour {
         }
     }
 
-    public Vector2Int GetButtonPosition() => buttonPosition;
+    private void CacheSingleTilePosition(Tilemap map, out Vector2Int pos) {
+        pos = default;
+        foreach (var cell in map.cellBounds.allPositionsWithin) {
+            if (map.GetTile(cell) == null) continue;
+            var world = map.CellToWorld(cell) + map.tileAnchor;
+            pos = new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
+            break;
+        }
+    }
 
     private void GenerateGrid() {
         for (int x = 0; x < width; x++)
