@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
@@ -33,12 +34,13 @@ public class GridManager : MonoBehaviour {
     private List<PlayerController> ghostsOld = new List<PlayerController>();
 
     public Vector2Int GetButtonPosition() => buttonPosition;
-
-    public Vector2Int GetTorchPosition() => torchPosition;
+    public Vector2Int GetTorchPosition()  => torchPosition;
 
     private int[,] spawnPoints = {{3, 4}, {13, 0}};
-
     public static int levelNumber = 0;
+
+    public event Action OnTorchRoomDoorOpened;
+    public event Action OnTorchRoomDoorClosed;
 
     void Awake() {
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
@@ -107,8 +109,7 @@ public class GridManager : MonoBehaviour {
 
     private void GenerateGrid() {
         for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-            {
+            for (int y = 0; y < height; y++) {
                 var t = Instantiate(tilePrefab, new Vector3(x, y), quaternion.identity);
                 t.name = $"Tile {x} {y}";
                 t.Init((x % 2 == 0) ^ (y % 2 == 0), new Vector2Int(x, y));
@@ -134,31 +135,27 @@ public class GridManager : MonoBehaviour {
         CloseTorchRoomDoor();
         if (player != null) {
             player.gameObject.GetComponent<PlayerController>().ghost = true;
-            ghosts.Add(player.gameObject.GetComponent<PlayerController>());
-
+            ghosts.Add(player);
             player.gameObject.SetActive(false);
-            foreach (PlayerController ghostPrefab in ghostsOld)
-                ghostPrefab.gameObject.SetActive(false);
+            foreach (var g in ghostsOld)
+                g.gameObject.SetActive(false);
         }
 
-        Vector2Int spawn = 
-            new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
-
+        var spawn = new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
         player = Instantiate(playerPrefab);
         player.Init(spawn, this);
-        player.GetComponent<SpriteRenderer>().sortingOrder = 1;
-        player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-        player.energy -= ghosts.Count;
-        if (player.energy < 0) player.energy = 0;
+        var sr = player.GetComponent<SpriteRenderer>();
+        sr.sortingOrder = 1;
+        sr.color = new Color(1,1,1,1);
+        player.energy = Mathf.Max(0, player.energy - ghosts.Count);
 
-        foreach (PlayerController ghostPrefab in ghosts) {
-            PlayerController ghost = Instantiate(ghostPrefab);
+        foreach (var ghostPrefab in ghosts) {
+            var ghost = Instantiate(ghostPrefab);
             ghost.Init(spawn, this);
             ghost.moveHistory = new List<PlayerController.MoveRecord>(ghostPrefab.moveHistory);
-
-            ghost.GetComponent<SpriteRenderer>().sortingOrder = 0;
-            ghost.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-
+            var gsr = ghost.GetComponent<SpriteRenderer>();
+            gsr.sortingOrder = 0;
+            gsr.color = new Color(1,1,1,0.5f);
             ghost.gameObject.SetActive(true);
             ghost.GhostInit();
             ghostsOld.Add(ghost);
@@ -169,48 +166,44 @@ public class GridManager : MonoBehaviour {
         gemManager?.ResetGems();
 
         CloseTorchRoomDoor();
-        if (player != null)
-            player.gameObject.SetActive(false);
+        if (player != null) player.gameObject.SetActive(false);
 
-        foreach (var g in ghostsOld)
-            Destroy(g.gameObject);
+        foreach (var g in ghostsOld) Destroy(g.gameObject);
         ghostsOld.Clear();
-
-        foreach (var gp in ghosts)
-            Destroy(gp.gameObject);
+        foreach (var gp in ghosts) Destroy(gp.gameObject);
         ghosts.Clear();
 
-        Vector2Int spawn = 
-            new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
-
+        var spawn = new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
         player = Instantiate(playerPrefab);
         player.Init(spawn, this);
         var sr = player.GetComponent<SpriteRenderer>();
         sr.sortingOrder = 1;
-        sr.color = new Color(1, 1, 1, 1);
+        sr.color = new Color(1,1,1,1);
     }
 
     public void OpenTorchRoomDoor() {
-        if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(false);
+        if (torchDoorTilemap          != null) torchDoorTilemap.gameObject.SetActive(false);
         if (torchDoorCollisionTilemap != null) torchDoorCollisionTilemap.gameObject.SetActive(false);
-        foreach (var cell in doorCells)
-            deadlyCells.Remove(cell);
+        foreach (var cell in doorCells) deadlyCells.Remove(cell);
         if (buttonTilemap != null) {
-            Color c    = buttonTilemap.color;
-            c.a        = 0.5f;
+            var c = buttonTilemap.color;
+            c.a = .5f;
             buttonTilemap.color = c;
         }
+        OnTorchRoomDoorOpened?.Invoke();
     }
 
     public void CloseTorchRoomDoor() {
-        if (torchDoorTilemap != null)          torchDoorTilemap.gameObject.SetActive(true);
-        if (torchDoorCollisionTilemap != null){
+        if (torchDoorTilemap          != null) torchDoorTilemap.gameObject.SetActive(true);
+        if (torchDoorCollisionTilemap != null) {
             torchDoorCollisionTilemap.gameObject.SetActive(true);
-            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);}
+            CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
+        }
         if (buttonTilemap != null) {
-            Color c    = buttonTilemap.color;
-            c.a        = 1f;
+            var c = buttonTilemap.color;
+            c.a = 1f;
             buttonTilemap.color = c;
         }
+        OnTorchRoomDoorClosed?.Invoke();
     }
 }
