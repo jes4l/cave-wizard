@@ -13,6 +13,10 @@ public class GemManager : MonoBehaviour {
     int[,,] gemSpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
                               {{3, 7}, {8, 5}, {10, 2}},
                               {{3, 7}, {8, 5}, {10, 2}}}; //...
+    
+    int[,,] decoySpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
+                              {{-1, -1}, {8, 5}, {10, 2}},
+                              {{3, 7}, {8, 5}, {10, 2}}}; //...
 
     void Start() {
         GameObject[] gems = {_gem1Prefab, _gem2Prefab, _gem3Prefab};
@@ -23,10 +27,18 @@ public class GemManager : MonoBehaviour {
                 b = gemSpawnPoints[GridManager.levelNumber, i, 1];
             SpawnGem(gems[i], a, b);
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            int a = decoySpawnPoints[GridManager.levelNumber, i, 0],
+                b = decoySpawnPoints[GridManager.levelNumber, i, 1];
+            SpawnGem(gems[i], a, b);
+        }
     }
 
         private void SpawnGem(GameObject prefab, int x, int y)
     {
+        if (x == -1) return;
         Vector2Int pos = new Vector2Int(x, y);
         var gem = Instantiate(prefab, new Vector3(pos.x, pos.y, -1f), Quaternion.identity);
         _allGems.Add(gem);
