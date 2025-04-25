@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
-        energy = 100;
+        energy = 10;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
