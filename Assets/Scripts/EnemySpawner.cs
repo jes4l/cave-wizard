@@ -7,14 +7,14 @@ public class EnemySpawner : MonoBehaviour
                                {null, null},
                                {new Vector3(10, 3, -1), new Vector3(8, 2, -1)},
                                {new Vector3(6, 8, -1), new Vector3(14, 4, -1)},
-                               {new Vector3(13, 2, -1), new Vector3(10, 2, -1)}};
+                               {new Vector3(7, 7, -1), new Vector3(8, 1, -1)}};
 
-    // -1. x 0.> 1.< 2.^ 3.v                           
+    // -1. x 0.> 1.< 2.^ 3.v 4.[o]                          
     int[,] modes = {{-1, -1}, // level 1
                    {-1, -1}, // level 2
                    {0, 1}, // level  3
                    {3, 1}, // level 4
-                   {-1, -1}}; // level 5
+                   {3, 4}}; // level 5
 
     void Start()
     {
