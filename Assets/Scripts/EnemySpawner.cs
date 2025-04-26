@@ -3,7 +3,16 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
-    private static readonly Vector3 SpawnPoint = new Vector3(13f, 2f, -1f);
+    Vector3?[,] spawnPoints = {{null, null}, 
+                               {null, null},
+                               {new Vector3(13, 2, -1), new Vector3(10, 2, -1)},
+                               {new Vector3(13, 2, -1), new Vector3(10, 2, -1)},
+                               {new Vector3(13, 2, -1), new Vector3(10, 2, -1)}};
+    int[,] modes = {{-1, -1},
+                   {-1, -1},
+                   {0, 1},
+                   {0, 1},
+                   {0, 1}};
 
     void Start()
     {
@@ -11,6 +20,18 @@ public class EnemySpawner : MonoBehaviour
         var parent = GameObject.Find("TilemapObstacles")?.transform;
         if (parent == null) return;
 
-        Instantiate(enemyPrefab, SpawnPoint, Quaternion.identity, parent);
+        if (spawnPoints[GridManager.levelNumber, 0] is Vector3 spawn)
+        {        
+            GameObject e =
+                Instantiate(enemyPrefab, spawn, Quaternion.identity, parent);
+            e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 0];
+        }
+        
+        if (spawnPoints[GridManager.levelNumber, 1] is Vector3 spawn2)
+        {        
+            GameObject e =
+                Instantiate(enemyPrefab, spawn2, Quaternion.identity, parent);
+            e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 1];
+        }
     }
 }

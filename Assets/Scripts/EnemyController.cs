@@ -1,9 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public ProjectileController projectilePrefab;
     private GridManager gridManager;
     private Vector2Int gridPosition;
+
+    public int mode = 0;
 
     void Start()
     {
@@ -16,11 +20,29 @@ public class EnemyController : MonoBehaviour
             Mathf.RoundToInt(worldPos.y)
         );
         gridManager.RegisterEnemyCell(gridPosition);
+
+        StartCoroutine(SpawnProjectile());
     }
 
     void OnDestroy()
     {
         if (gridManager != null)
             gridManager.UnregisterEnemyCell(gridPosition);
+    }
+
+    private IEnumerator SpawnProjectile()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2);
+
+            var parent = GameObject.Find("TilemapObstacles")?.transform;
+            if (parent != null) {
+                        
+            ProjectileController p =
+                Instantiate(projectilePrefab, transform.position, Quaternion.identity, parent);
+            p.mode = mode;
+            }
+        }
     }
 }

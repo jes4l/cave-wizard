@@ -55,6 +55,9 @@ public class PlayerController : MonoBehaviour {
             MoveTo(gridPosition + move);
     }
 
+    //void OnTriggerEnter2D(Collider2D other) =>
+    // respawn()
+
     public void GhostInit() => StartCoroutine(Walk());
 
     private IEnumerator Walk() {
@@ -67,15 +70,15 @@ public class PlayerController : MonoBehaviour {
 
     public void MoveTo(Vector2Int target) {
         bool wasOnButton = gridPosition == buttonPos;
-        if (!HasEnergy){
+        if (!HasEnergy) {
             Debug.Log("No energy left – cannot move.");
             return;
         }
-        if (!gridManager.IsPositionValid(target)){
+        if (!gridManager.IsPositionValid(target)) {
             Debug.Log("Tried to move to invalid tile.");
             return;
         }
-        if (gridManager.IsDeadly(target)){
+        if (gridManager.IsDeadly(target)) {
             Debug.Log($"Entered deadly tile at {target} – respawning.");
             if (!ghost) gridManager.RespawnPlayer();
             return;
@@ -92,8 +95,7 @@ public class PlayerController : MonoBehaviour {
         gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1f);
 
-        if (gridPosition == gridManager.GetTorchPosition())
-        {
+        if (gridPosition == gridManager.GetTorchPosition()) {
             GridManager.levelNumber++;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
@@ -101,12 +103,12 @@ public class PlayerController : MonoBehaviour {
         Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
         foreach (var hit in hits) {
             if (hit.CompareTag("Gem1")) {
-                energy += 3;
+                energy += 2;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
             else if (hit.CompareTag("Gem2")) {
-                energy += 5;
+                energy += 4;
                 hit.tag = "Untagged";
                 hit.gameObject.SetActive(false);
             }
@@ -121,10 +123,12 @@ public class PlayerController : MonoBehaviour {
         Debug.Log($"Player moved to {gridPosition} (Δt = {delta:F2}s). Energy: {energy}");
 
         bool isOnButton = gridPosition == buttonPos;
-        if (isOnButton)
+        if (isOnButton) {
             gridManager.OpenTorchRoomDoor();
-        else if (wasOnButton)
+        }
+        else if (wasOnButton && !gridManager.IsButtonPressed()) {
             gridManager.CloseTorchRoomDoor();
+        }
     }
 
     public Vector2Int GetGridPosition() => gridPosition;

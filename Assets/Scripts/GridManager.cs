@@ -37,7 +37,7 @@ public class GridManager : MonoBehaviour {
     public Vector2Int GetButtonPosition() => buttonPosition;
     public Vector2Int GetTorchPosition()  => torchPosition;
 
-    private int[,] spawnPoints = {{3, 4}, {13, 0}, {13,2}};
+    private int[,] spawnPoints = {{3, 4}, {13, 0}, {8,0}};
     public static int levelNumber = 0;
 
     public event Action OnTorchRoomDoorOpened;
@@ -122,6 +122,17 @@ public class GridManager : MonoBehaviour {
         pos.y >= 0 && pos.y < height &&
         !blockedCells.Contains(pos) &&
         !enemyCells.Contains(pos);
+
+    public bool IsButtonPressed() {
+        if (player != null && player.GetGridPosition() == buttonPosition)
+            return true;
+        foreach (var g in ghostsOld) {
+            if (g.gameObject.activeSelf && g.GetGridPosition() == buttonPosition)
+                return true;
+        }
+        return false;
+    }
+
 
     public void RegisterEnemyCell(Vector2Int pos) =>
         enemyCells.Add(pos);

@@ -10,12 +10,12 @@ public class GemManager : MonoBehaviour {
     private readonly List<GameObject> _allGems = new();
     private readonly HashSet<Vector2Int> _occupied = new();
 
-    int[,,] gemSpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
-                              {{3, 7}, {8, 5}, {10, 2}},
+    int[,,] gemSpawnPoints = {{{3, 7}, {10, 2}, {2, 1}},
+                              {{9, 1}, {13, 4}, {14,3}},
                               {{3, 7}, {8, 5}, {10, 2}}}; //...
     
-    int[,,] decoySpawnPoints = {{{3, 7}, {8, 5}, {10, 2}},
-                              {{-1, -1}, {8, 5}, {10, 2}},
+    int[,,] decoySpawnPoints = {{{6, 4}, {-1, -1}, {-1, -1}},
+                              {{12, 4}, {3, 7}, {1, 5}},
                               {{3, 7}, {8, 5}, {10, 2}}}; //...
 
     void Start() {
