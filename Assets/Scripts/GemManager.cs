@@ -10,13 +10,19 @@ public class GemManager : MonoBehaviour {
     private readonly List<GameObject> _allGems = new();
     private readonly HashSet<Vector2Int> _occupied = new();
 
-    int[,,] gemSpawnPoints = {{{3, 7}, {10, 2}, {2, 1}},
-                              {{9, 1}, {13, 4}, {14,3}},
-                              {{3, 7}, {8, 5}, {10, 2}}}; //...
+    int[,,] gemSpawnPoints = {{{3, 7}, {10, 2}, {2, 1}}, // do not touch
+                              {{9, 1}, {13, 4}, {14,3}}, // do not touch
+                              {{14, 7}, {2, 0}, {13, 3}},  // do not touch
+                              {{-1, -1}, {-1, -1}, {-1, -1}},
+                              {{-1, -1}, {-1, -1}, {-1, -1}},
+                              };
     
-    int[,,] decoySpawnPoints = {{{6, 4}, {-1, -1}, {-1, -1}},
-                              {{12, 4}, {3, 7}, {1, 5}},
-                              {{3, 7}, {8, 5}, {10, 2}}}; //...
+    int[,,] decoySpawnPoints = {{{6, 4}, {-1, -1}, {-1, -1}}, // do not touch
+                              {{12, 4}, {3, 7}, {1, 5}}, // do not touch
+                              {{9, 6}, {5, 4}, {9, 8}}, // do not touch
+                              {{-1, -1}, {-1, -1}, {-1, -1}},
+                              {{-1, -1}, {-1, -1}, {-1, -1}},
+                              };
 
     void Start() {
         GameObject[] gems = {_gem1Prefab, _gem2Prefab, _gem3Prefab};
