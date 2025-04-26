@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour {
     public struct MoveRecord {
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
-        energy = 100;
+        energy = 10;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
@@ -55,14 +56,14 @@ public class PlayerController : MonoBehaviour {
             MoveTo(gridPosition + move);
     }
 
-    //void OnTriggerEnter2D(Collider2D other) =>
-    // respawn()
+    void OnTriggerEnter2D(Collider2D other) {
+        Destroy(other.gameObject);
+        if (!ghost) gridManager.RespawnPlayer(); }
 
     public void GhostInit() => StartCoroutine(Walk());
 
     private IEnumerator Walk() {
-        foreach (MoveRecord mr in moveHistory)
-        {
+        foreach (MoveRecord mr in moveHistory) {
             yield return new WaitForSeconds(mr.DeltaTime);
             MoveTo(mr.Position);
         }

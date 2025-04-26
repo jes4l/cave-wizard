@@ -1,16 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
-{
+public class EnemyController : MonoBehaviour {
     public ProjectileController projectilePrefab;
     private GridManager gridManager;
     private Vector2Int gridPosition;
 
     public int mode = 0;
 
-    void Start()
-    {
+    void Start() {
         gridManager = Object.FindFirstObjectByType<GridManager>();
         if (gridManager == null) return;
 
@@ -19,21 +17,18 @@ public class EnemyController : MonoBehaviour
             Mathf.RoundToInt(worldPos.x),
             Mathf.RoundToInt(worldPos.y)
         );
-        gridManager.RegisterEnemyCell(gridPosition);
+        gridManager.RegisterEnemyCell(gridPosition, this);
 
         StartCoroutine(SpawnProjectile());
     }
 
-    void OnDestroy()
-    {
+    void OnDestroy() {
         if (gridManager != null)
             gridManager.UnregisterEnemyCell(gridPosition);
     }
 
-    private IEnumerator SpawnProjectile()
-    {
-        while (true)
-        {
+    private IEnumerator SpawnProjectile() {
+        while (true) {
             yield return new WaitForSeconds(2);
 
             var parent = GameObject.Find("TilemapObstacles")?.transform;
@@ -41,7 +36,9 @@ public class EnemyController : MonoBehaviour
                         
             ProjectileController p =
                 Instantiate(projectilePrefab, transform.position, Quaternion.identity, parent);
-            p.mode = mode;
+                var rb = p.GetComponent<Rigidbody2D>();
+                rb.gravityScale = 0f;
+                p.mode           = mode;
             }
         }
     }

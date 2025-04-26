@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GridManager : MonoBehaviour {
     [SerializeField] private int width, height;
@@ -22,6 +23,7 @@ public class GridManager : MonoBehaviour {
 
     [SerializeField] private Tilemap torchTilemap;
     private Vector2Int torchPosition;
+    public Vector2Int GetPlayerGridPosition() => player.GetGridPosition();
 
     [SerializeField] private GemManager gemManager;
 
@@ -30,10 +32,9 @@ public class GridManager : MonoBehaviour {
     private readonly HashSet<Vector2Int> deadlyCells = new();
     private readonly HashSet<Vector2Int> doorCells = new();
     private readonly HashSet<Vector2Int> enemyCells = new();
-
+    private readonly Dictionary<Vector2Int, EnemyController> enemiesByCell = new Dictionary<Vector2Int, EnemyController>();
     private List<PlayerController> ghosts = new List<PlayerController>();
     private List<PlayerController> ghostsOld = new List<PlayerController>();
-
     public Vector2Int GetButtonPosition() => buttonPosition;
     public Vector2Int GetTorchPosition()  => torchPosition;
 
@@ -77,6 +78,24 @@ public class GridManager : MonoBehaviour {
 
     void Update() {
         energyText.text = player.energy.ToString();
+
+        if (!Input.GetKey(KeyCode.Space)) return;
+
+        var offs = new[] {
+            new Vector2Int( 0,  1), new Vector2Int( 0, -1), new Vector2Int( 1,  0), new Vector2Int(-1,  0)
+        };
+
+        var p   = GetPlayerGridPosition();
+        var hit = offs
+            .Select(d => p + d)
+            .FirstOrDefault(cell => enemyCells.Contains(cell));
+
+        if (hit != default
+        && enemiesByCell.TryGetValue(hit, out var e)) {
+            enemyCells.Remove(hit);
+            enemiesByCell.Remove(hit);
+            Destroy(e.gameObject);
+        }
     }
 
     private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null) {
@@ -134,10 +153,14 @@ public class GridManager : MonoBehaviour {
     }
 
 
-    public void RegisterEnemyCell(Vector2Int pos) =>
+    public void RegisterEnemyCell(Vector2Int pos, EnemyController enemy) {
         enemyCells.Add(pos);
-    public void UnregisterEnemyCell(Vector2Int pos) =>
+        enemiesByCell[pos] = enemy;
+    }
+    public void UnregisterEnemyCell(Vector2Int pos) {
         enemyCells.Remove(pos);
+        enemiesByCell.Remove(pos);
+    }
 
 
     public bool IsDeadly(Vector2Int pos) =>

@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
-{
+public class EnemySpawner : MonoBehaviour {
     [SerializeField] private GameObject enemyPrefab;
     Vector3?[,] spawnPoints = {{null, null}, 
                                {null, null},
@@ -10,27 +9,20 @@ public class EnemySpawner : MonoBehaviour
                                {new Vector3(7, 7, -1), new Vector3(8, 1, -1)}};
 
     // -1. x 0.> 1.< 2.^ 3.v 4.[o]                          
-    int[,] modes = {{-1, -1}, // level 1
-                   {-1, -1}, // level 2
-                   {0, 1}, // level  3
-                   {3, 1}, // level 4
-                   {3, 4}}; // level 5
+    int[,] modes = {{-1, -1}, {-1, -1}, {0, 1}, {3, 1}, {3, 4}};
 
-    void Start()
-    {
+    void Start() {
         if (enemyPrefab == null) return;
         var parent = GameObject.Find("TilemapObstacles")?.transform;
         if (parent == null) return;
 
-        if (spawnPoints[GridManager.levelNumber, 0] is Vector3 spawn)
-        {        
+        if (spawnPoints[GridManager.levelNumber, 0] is Vector3 spawn) {        
             GameObject e =
                 Instantiate(enemyPrefab, spawn, Quaternion.identity, parent);
             e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 0];
         }
         
-        if (spawnPoints[GridManager.levelNumber, 1] is Vector3 spawn2)
-        {        
+        if (spawnPoints[GridManager.levelNumber, 1] is Vector3 spawn2) {        
             GameObject e =
                 Instantiate(enemyPrefab, spawn2, Quaternion.identity, parent);
             e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 1];
