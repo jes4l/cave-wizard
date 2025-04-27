@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
     [SerializeField] private GameObject enemyPrefab;
-    Vector3?[,] spawnPoints = {{null, null}, 
-                               {null, null},
-                               {new Vector3(10, 3, -1), new Vector3(8, 2, -1)},
-                               {new Vector3(6, 8, -1), new Vector3(14, 4, -1)},
-                               {new Vector3(7, 7, -1), new Vector3(8, 1, -1)}};
+    Vector3?[,] spawnPoints = {{null, null, null}, 
+                               {null, null, null},
+                               {new Vector3(10, 3, -1), new Vector3(8, 2, -1), null},
+                               {new Vector3(6, 8, -1), new Vector3(14, 4, -1), new Vector3(1, 4, -1)},
+                               {new Vector3(7, 7, -1), new Vector3(8, 1, -1), null}};
 
     // -1. x 0.> 1.< 2.^ 3.v 4.[o]                          
-    int[,] modes = {{-1, -1}, {-1, -1}, {0, 1}, {3, 1}, {3, 4}};
+    int[,] modes = {{-1, -1, -1}, {-1, -1, -1}, {0, 1, -1}, {3, 1, 0}, {3, 4, -1}};
 
     void Start() {
         ResetEnemies();
@@ -26,16 +26,15 @@ public class EnemySpawner : MonoBehaviour {
                 Destroy(child.gameObject);
         }
 
-        if (spawnPoints[GridManager.levelNumber, 0] is Vector3 spawn) {        
-            GameObject e =
-                Instantiate(enemyPrefab, spawn, Quaternion.identity, parent);
-            e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 0];
-        }
+        int level = GridManager.levelNumber;
+        int cols  = spawnPoints.GetLength(1);
 
-        if (spawnPoints[GridManager.levelNumber, 1] is Vector3 spawn2) {        
-            GameObject e =
-                Instantiate(enemyPrefab, spawn2, Quaternion.identity, parent);
-            e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 1];
+        for (int j = 0; j < cols; j++) {
+            if (spawnPoints[level, j] is Vector3 pos) {
+                var enemy = Instantiate(enemyPrefab, pos, Quaternion.identity, parent);
+                enemy.GetComponent<EnemyController>().mode = modes[level, j];
+            }
         }
     }
+
 }

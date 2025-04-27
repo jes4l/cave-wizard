@@ -13,7 +13,7 @@ public class GemManager : MonoBehaviour {
     int[,,] gemSpawnPoints = {{{3, 7}, {10, 2}, {2, 1}}, // do not touch
                               {{9, 1}, {13, 4}, {14,3}}, // do not touch
                               {{14, 7}, {2, 0}, {13, 3}},  // do not touch
-                              {{-1, -1}, {-1, -1}, {-1, -1}},
+                              {{-1, -1}, {1, 6}, {-1, -1}},
                               {{-1, -1}, {-1, -1}, {-1, -1}},
                               };
     
