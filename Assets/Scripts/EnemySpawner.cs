@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour {
 
     public void ResetEnemies() {
         if (enemyPrefab == null) return;
-        var parent = GameObject.Find("TilemapObstacles")?.transform;
+        var parent = GameObject.Find("Enemy")?.transform;
         if (parent == null) return;
 
         for (int i = parent.childCount - 1; i >= 0; i--) {

@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     public bool ghost = false;
 
     private void Awake() {
-        Instance     = this;
+        if (!ghost) Instance = this;
         lastMoveTime = Time.time;
         energy = 100;
     }

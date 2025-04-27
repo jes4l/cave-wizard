@@ -7,6 +7,7 @@ TagManager:
   - Gem1
   - Gem2
   - Gem3
+  - GameBackground
   layers:
   - Default
   - TransparentFX

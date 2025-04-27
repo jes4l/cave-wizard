@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(2);
 
-            var parent = GameObject.Find("TilemapObstacles")?.transform;
+            var parent = GameObject.Find("Enemy")?.transform;
             if (parent != null) {
                         
             ProjectileController p =
