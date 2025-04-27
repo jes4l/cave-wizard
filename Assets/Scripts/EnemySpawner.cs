@@ -6,10 +6,10 @@ public class EnemySpawner : MonoBehaviour {
                                {null, null, null},
                                {new Vector3(10, 3, -1), new Vector3(8, 2, -1), null},
                                {new Vector3(6, 8, -1), new Vector3(14, 4, -1), new Vector3(1, 4, -1)},
-                               {new Vector3(7, 7, -1), new Vector3(8, 1, -1), null}};
+                               {new Vector3(7, 8, -1), new Vector3(4, 0, -1), new Vector3(8, 3, -1)}};
 
     // -1. x 0.> 1.< 2.^ 3.v 4.[o]                          
-    int[,] modes = {{-1, -1, -1}, {-1, -1, -1}, {0, 1, -1}, {3, 1, 0}, {3, 4, -1}};
+    int[,] modes = {{-1, -1, -1}, {-1, -1, -1}, {0, 1, -1}, {3, 1, 0}, {4, 4, 2}};
 
     void Start() {
         ResetEnemies();
