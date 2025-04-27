@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour {
     public struct MoveRecord {
         public Vector2Int Position;
         public float      DeltaTime;
+        public bool       IsAttack;
 
-        public MoveRecord(Vector2Int position, float deltaTime){
+        public MoveRecord(Vector2Int position, float deltaTime, bool isAttack = false){
             Position  = position;
             DeltaTime = deltaTime;
+            IsAttack  = isAttack;
         }
     }
 
@@ -32,7 +34,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         Instance     = this;
         lastMoveTime = Time.time;
-        energy = 10;
+        energy = 100;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
@@ -54,18 +56,31 @@ public class PlayerController : MonoBehaviour {
 
         if (move != Vector2Int.zero)
             MoveTo(gridPosition + move);
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            energy--;
+            float now = Time.time;
+            float delta = now - lastMoveTime;
+            lastMoveTime = now;
+            moveHistory.Add(new MoveRecord(gridPosition, delta, true));
+            gridManager.TryAttackAt(gridPosition);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other) {
         Destroy(other.gameObject);
-        if (!ghost) gridManager.RespawnPlayer(); }
-
+        if (!ghost) gridManager.RespawnPlayer();
+    }
     public void GhostInit() => StartCoroutine(Walk());
 
     private IEnumerator Walk() {
         foreach (MoveRecord mr in moveHistory) {
             yield return new WaitForSeconds(mr.DeltaTime);
-            MoveTo(mr.Position);
+            if (mr.IsAttack) {
+                gridManager.TryAttackAt(gridPosition);
+            } else {
+                MoveTo(mr.Position);
+            }
         }
     }
 

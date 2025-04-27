@@ -13,10 +13,7 @@ public class EnemyController : MonoBehaviour {
         if (gridManager == null) return;
 
         var worldPos = transform.position;
-        gridPosition = new Vector2Int(
-            Mathf.RoundToInt(worldPos.x),
-            Mathf.RoundToInt(worldPos.y)
-        );
+        gridPosition = new Vector2Int(Mathf.RoundToInt(worldPos.x), Mathf.RoundToInt(worldPos.y));
         gridManager.RegisterEnemyCell(gridPosition, this);
 
         StartCoroutine(SpawnProjectile());
@@ -24,7 +21,7 @@ public class EnemyController : MonoBehaviour {
 
     void OnDestroy() {
         if (gridManager != null)
-            gridManager.UnregisterEnemyCell(gridPosition);
+            gridManager.UnregisterEnemyCell(gridPosition, this);
     }
 
     private IEnumerator SpawnProjectile() {

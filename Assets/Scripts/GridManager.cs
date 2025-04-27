@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using System.Linq;
 
 public class GridManager : MonoBehaviour {
     [SerializeField] private int width, height;
@@ -39,7 +38,7 @@ public class GridManager : MonoBehaviour {
     public Vector2Int GetTorchPosition()  => torchPosition;
 
     private int[,] spawnPoints = {{3, 4}, {13, 0}, {8, 0}, {2, 0}, {0, 6}};
-    public static int levelNumber = 0;
+    public static int levelNumber = 2;
 
     public event Action OnTorchRoomDoorOpened;
     public event Action OnTorchRoomDoorClosed;
@@ -75,27 +74,24 @@ public class GridManager : MonoBehaviour {
         RespawnPlayer();
         //cam.position = new Vector3(width * .5f - .5f, height * .5f - .5f, -10f);
     }
-
     void Update() {
         energyText.text = player.energy.ToString();
+    }
 
-        if (!Input.GetKey(KeyCode.Space)) return;
-
+    public bool TryAttackAt(Vector2Int origin) {
         var offs = new[] {
             new Vector2Int( 0,  1), new Vector2Int( 0, -1), new Vector2Int( 1,  0), new Vector2Int(-1,  0)
         };
-
-        var p   = GetPlayerGridPosition();
-        var hit = offs
-            .Select(d => p + d)
-            .FirstOrDefault(cell => enemyCells.Contains(cell));
-
-        if (hit != default
-        && enemiesByCell.TryGetValue(hit, out var e)) {
-            enemyCells.Remove(hit);
-            enemiesByCell.Remove(hit);
-            Destroy(e.gameObject);
+        foreach (var d in offs) {
+            var cell = origin + d;
+            if (enemiesByCell.TryGetValue(cell, out var e)) {
+                enemyCells.Remove(cell);
+                enemiesByCell.Remove(cell);
+                Destroy(e.gameObject);
+                return true;
+            }
         }
+        return false;
     }
 
     private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null) {
@@ -157,11 +153,12 @@ public class GridManager : MonoBehaviour {
         enemyCells.Add(pos);
         enemiesByCell[pos] = enemy;
     }
-    public void UnregisterEnemyCell(Vector2Int pos) {
-        enemyCells.Remove(pos);
-        enemiesByCell.Remove(pos);
-    }
-
+     public void UnregisterEnemyCell(Vector2Int pos, EnemyController enemy) {
+        if (enemiesByCell.TryGetValue(pos, out var e) && e == enemy) {
+            enemyCells.Remove(pos);
+            enemiesByCell.Remove(pos);
+        }
+     }
 
     public bool IsDeadly(Vector2Int pos) =>
         deadlyCells.Contains(pos);
@@ -202,6 +199,8 @@ public class GridManager : MonoBehaviour {
             ghost.GhostInit();
             ghostsOld.Add(ghost);
         }
+        var spawner = UnityEngine.Object.FindAnyObjectByType<EnemySpawner>();
+        spawner?.ResetEnemies();
     }
 
     public void Restart() {
@@ -221,6 +220,8 @@ public class GridManager : MonoBehaviour {
         var sr = player.GetComponent<SpriteRenderer>();
         sr.sortingOrder = 1;
         sr.color = new Color(1,1,1,1);
+        var spawner = UnityEngine.Object.FindAnyObjectByType<EnemySpawner>();
+        spawner?.ResetEnemies();
     }
 
     public void OpenTorchRoomDoor() {

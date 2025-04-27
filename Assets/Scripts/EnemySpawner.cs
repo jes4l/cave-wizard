@@ -12,16 +12,26 @@ public class EnemySpawner : MonoBehaviour {
     int[,] modes = {{-1, -1}, {-1, -1}, {0, 1}, {3, 1}, {3, 4}};
 
     void Start() {
+        ResetEnemies();
+    }
+
+    public void ResetEnemies() {
         if (enemyPrefab == null) return;
         var parent = GameObject.Find("TilemapObstacles")?.transform;
         if (parent == null) return;
+
+        for (int i = parent.childCount - 1; i >= 0; i--) {
+            var child = parent.GetChild(i);
+            if (child.GetComponent<EnemyController>() != null)
+                Destroy(child.gameObject);
+        }
 
         if (spawnPoints[GridManager.levelNumber, 0] is Vector3 spawn) {        
             GameObject e =
                 Instantiate(enemyPrefab, spawn, Quaternion.identity, parent);
             e.GetComponent<EnemyController>().mode = modes[GridManager.levelNumber, 0];
         }
-        
+
         if (spawnPoints[GridManager.levelNumber, 1] is Vector3 spawn2) {        
             GameObject e =
                 Instantiate(enemyPrefab, spawn2, Quaternion.identity, parent);
