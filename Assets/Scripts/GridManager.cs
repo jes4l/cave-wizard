@@ -156,6 +156,9 @@ public class GridManager : MonoBehaviour {
         !blockedCells.Contains(pos) &&
         !enemyCells.Contains(pos);
 
+    public bool IsEnemyAt(Vector2Int pos) => 
+        enemiesByCell.ContainsKey(pos);
+
     public bool IsButtonPressed() {
         if (player != null && player.GetGridPosition() == buttonPosition)
             return true;

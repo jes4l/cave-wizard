@@ -20,8 +20,16 @@ public class Tile : MonoBehaviour {
 
     public void OnMouseDown() {
         var p = PlayerController.Instance;
-        if (p != null && p.HasEnergy && IsNextTo(p.GetGridPosition(), _gridPos))
-            p.MoveTo(_gridPos);
+        if (p == null || !p.HasEnergy) 
+            return;
+
+        var playerPos = p.GetGridPosition();
+        if (!IsNextTo(playerPos, _gridPos)) 
+            return;
+
+        if (p.Grid.IsEnemyAt(_gridPos)) {
+            p.Attack();}
+        else { p.MoveTo(_gridPos);}
     }
 
     public void OnMouseExit() =>

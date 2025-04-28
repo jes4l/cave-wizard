@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour {
 
     public List<MoveRecord> moveHistory = new();
     private float lastMoveTime;
+    public GridManager Grid => gridManager;
+
 
     public bool ghost = false;
 
@@ -85,6 +87,15 @@ public class PlayerController : MonoBehaviour {
                 MoveTo(mr.Position);
             }
         }
+    }
+    public void Attack() {
+        if (!HasEnergy) return;
+        energy--;
+        float now        = Time.time;
+        float delta      = now - lastMoveTime;
+        lastMoveTime     = now;
+        moveHistory.Add(new MoveRecord(gridPosition, delta, isAttack: true));
+        gridManager.TryAttackAt(gridPosition, this);
     }
 
     public void MoveTo(Vector2Int target) {
