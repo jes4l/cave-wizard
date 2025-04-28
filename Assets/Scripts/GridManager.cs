@@ -39,7 +39,7 @@ public class GridManager : MonoBehaviour {
     public Vector2Int GetTorchPosition()  => torchPosition;
 
     private int[,] spawnPoints = {{3, 4}, {13, 0}, {8, 0}, {2, 0}, {1, 6}};
-    public static int levelNumber = 0;
+    public static int levelNumber = 3;
 
     public event Action OnTorchRoomDoorOpened;
     public event Action OnTorchRoomDoorClosed;
