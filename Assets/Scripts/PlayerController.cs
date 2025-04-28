@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         if (!ghost) Instance = this;
         lastMoveTime = Time.time;
-        energy = 100;
+        energy = 10;
     }
 
     public void Init(Vector2Int startPos, GridManager gm) {
@@ -49,10 +49,10 @@ public class PlayerController : MonoBehaviour {
         if (gridManager == null || !HasEnergy) return;
 
         Vector2Int move = Vector2Int.zero;
-        if (Input.GetKeyDown(KeyCode.UpArrow))    move.y = +1;
-        if (Input.GetKeyDown(KeyCode.DownArrow))  move.y = -1;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))  move.x = -1;
-        if (Input.GetKeyDown(KeyCode.RightArrow)) move.x = +1;
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))    move.y = +1;
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))  move.y = -1;
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))  move.x = -1;
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) move.x = +1;
 
         if (move != Vector2Int.zero)
             MoveTo(gridPosition + move);
