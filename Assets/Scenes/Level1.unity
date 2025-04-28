@@ -1610,7 +1610,7 @@ MonoBehaviour:
   height: 9
   tilePrefab: {fileID: 6608949088065589394, guid: f30060d68ae8a80498e0238ef2a6beb3, type: 3}
   cam: {fileID: 519420032}
-  playerPrefab: {fileID: 2568897598528645480, guid: 5f1e4e1bbdd58d4468a00338bf7984be, type: 3}
+  playerPrefab: {fileID: 1522924517890413403, guid: 5f1e4e1bbdd58d4468a00338bf7984be, type: 3}
   obstacleTilemap: {fileID: 404344821}
   torchRoomCollisionTilemap: {fileID: 1007677141}
   torchDoorCollisionTilemap: {fileID: 1203738489}

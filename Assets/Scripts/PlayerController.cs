@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour {
             float delta = now - lastMoveTime;
             lastMoveTime = now;
             moveHistory.Add(new MoveRecord(gridPosition, delta, true));
-            gridManager.TryAttackAt(gridPosition);
+            gridManager.TryAttackAt(gridPosition, this);
         }
 
         if (Input.GetKeyDown(KeyCode.M))
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour {
         foreach (MoveRecord mr in moveHistory) {
             yield return new WaitForSeconds(mr.DeltaTime);
             if (mr.IsAttack) {
-                gridManager.TryAttackAt(gridPosition);
+                gridManager.TryAttackAt(gridPosition, this);
             } else {
                 MoveTo(mr.Position);
             }

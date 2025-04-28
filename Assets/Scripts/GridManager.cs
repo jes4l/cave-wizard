@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
@@ -43,6 +44,8 @@ public class GridManager : MonoBehaviour {
     public event Action OnTorchRoomDoorOpened;
     public event Action OnTorchRoomDoorClosed;
 
+    private bool attackLock;
+
     void Awake() {
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
 
@@ -78,7 +81,9 @@ public class GridManager : MonoBehaviour {
         energyText.text = player.energy.ToString();
     }
 
-    public bool TryAttackAt(Vector2Int origin) {
+    public bool TryAttackAt(Vector2Int origin, PlayerController p) {
+        StartCoroutine(AttackDelay(p));
+
         var offs = new[] {
             new Vector2Int( 0,  1), new Vector2Int( 0, -1), new Vector2Int( 1,  0), new Vector2Int(-1,  0)
         };
@@ -92,6 +97,19 @@ public class GridManager : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    private IEnumerator AttackDelay(PlayerController p)
+    {
+        if (attackLock) yield break;
+        attackLock = true;
+        p.transform.GetChild(0).gameObject.SetActive(false);
+        p.transform.GetChild(1).gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1);        
+        p.transform.GetChild(1).gameObject.SetActive(false);
+        p.transform.GetChild(0).gameObject.SetActive(true);
+        attackLock = false;
     }
 
     private void CacheTiles(Tilemap map, HashSet<Vector2Int> primary, HashSet<Vector2Int> secondary = null) {
@@ -183,18 +201,40 @@ public class GridManager : MonoBehaviour {
         var spawn = new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
         player = Instantiate(playerPrefab);
         player.Init(spawn, this);
-        var sr = player.GetComponent<SpriteRenderer>();
-        sr.sortingOrder = 1;
-        sr.color = new Color(1,1,1,1);
+
+        for (int i = 0; i < 4; i++)
+        {
+            var sr = player.transform.GetChild(0).GetChild(i).GetComponent<SpriteRenderer>();
+            sr.sortingOrder = 1;
+            sr.color = new Color(1,1,1,1);
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            var sr = player.transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>();
+            sr.sortingOrder = 1;
+            sr.color = new Color(1,1,1,1);
+        }
+
         player.energy = Mathf.Max(0, player.energy - ghosts.Count);
 
         foreach (var ghostPrefab in ghosts) {
             var ghost = Instantiate(ghostPrefab);
             ghost.Init(spawn, this);
             ghost.moveHistory = new List<PlayerController.MoveRecord>(ghostPrefab.moveHistory);
-            var gsr = ghost.GetComponent<SpriteRenderer>();
-            gsr.sortingOrder = 0;
-            gsr.color = new Color(1,1,1,0.5f);
+            
+            for (int i = 0; i < 4; i++)
+            {
+                var sr = ghost.transform.GetChild(0).GetChild(i).GetComponent<SpriteRenderer>();
+                sr.sortingOrder = 0;
+                sr.color = new Color(1,1,1,0.5f);
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                var sr = ghost.transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>();
+                sr.sortingOrder = 0;
+                sr.color = new Color(1,1,1,0.5f);
+            }
+            
             ghost.gameObject.SetActive(true);
             ghost.GhostInit();
             ghostsOld.Add(ghost);
@@ -217,9 +257,20 @@ public class GridManager : MonoBehaviour {
         var spawn = new Vector2Int(spawnPoints[levelNumber, 0], spawnPoints[levelNumber, 1]);
         player = Instantiate(playerPrefab);
         player.Init(spawn, this);
-        var sr = player.GetComponent<SpriteRenderer>();
-        sr.sortingOrder = 1;
-        sr.color = new Color(1,1,1,1);
+        
+        for (int i = 0; i < 4; i++)
+        {
+            var sr = player.transform.GetChild(0).GetChild(i).GetComponent<SpriteRenderer>();
+            sr.sortingOrder = 1;
+            sr.color = new Color(1,1,1,1);
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            var sr = player.transform.GetChild(1).GetChild(i).GetComponent<SpriteRenderer>();
+            sr.sortingOrder = 1;
+            sr.color = new Color(1,1,1,1);
+        }
+
         var spawner = UnityEngine.Object.FindAnyObjectByType<EnemySpawner>();
         spawner?.ResetEnemies();
     }
