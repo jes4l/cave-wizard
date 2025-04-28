@@ -65,6 +65,9 @@ public class PlayerController : MonoBehaviour {
             moveHistory.Add(new MoveRecord(gridPosition, delta, true));
             gridManager.TryAttackAt(gridPosition);
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+            SceneManager.LoadScene(0);
     }
 
     void OnTriggerEnter2D(Collider2D other) {
