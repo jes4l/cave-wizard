@@ -57,7 +57,10 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) move.x = +1;
 
         if (move != Vector2Int.zero)
+        {
+            gridManager.sfx(2);
             MoveTo(gridPosition + move);
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)) {
             energy--;
@@ -125,9 +128,10 @@ public class PlayerController : MonoBehaviour {
         gridPosition = target;
         transform.position = new Vector3(target.x, target.y, -1f);
 
-        if (gridPosition == gridManager.GetTorchPosition()) {
-            GridManager.levelNumber++;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (gridPosition == gridManager.GetTorchPosition()) 
+        {
+            gridManager.sfx(1);
+            StartCoroutine(Delay());
         }
 
         Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
@@ -159,6 +163,13 @@ public class PlayerController : MonoBehaviour {
         else if (wasOnButton && !gridManager.IsButtonPressed()) {
             gridManager.CloseTorchRoomDoor();
         }
+    }
+
+    private IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2);        
+        GridManager.levelNumber++;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public Vector2Int GetGridPosition() => gridPosition;

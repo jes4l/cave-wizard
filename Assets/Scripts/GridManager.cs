@@ -19,6 +19,8 @@ public class GridManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI energyText;
 
     [SerializeField] private Tilemap buttonTilemap;
+    public static GridManager Instance { get; private set; }
+    [SerializeField] private GameObject soundFX;
     private Vector2Int buttonPosition;
 
     [SerializeField] private Tilemap torchTilemap;
@@ -47,6 +49,8 @@ public class GridManager : MonoBehaviour {
     private bool attackLock;
 
     void Awake() {
+        Instantiate(soundFX);
+
         gemManager ??= GameObject.Find("GemManager")?.GetComponent<GemManager>();
 
         obstacleTilemap           ??= GameObject.Find("TilemapObstacles")?.GetComponent<Tilemap>();
@@ -80,24 +84,46 @@ public class GridManager : MonoBehaviour {
     void Update() {
         energyText.text = player.energy.ToString();
     }
-
-    public bool TryAttackAt(Vector2Int origin, PlayerController p) {
+    public bool TryAttackAt(Vector2Int origin, PlayerController p)
+    {
         StartCoroutine(AttackDelay(p));
+        foreach (var dir in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left })
+        {
+            var cell = origin + dir;
+            if (!enemiesByCell.TryGetValue(cell, out var enemy)) continue;
+            enemyCells.Remove(cell);
+            enemiesByCell.Remove(cell);
+            StartCoroutine(FadeThenDestroy(enemy.gameObject, 1.2f));
 
-        var offs = new[] {
-            new Vector2Int( 0,  1), new Vector2Int( 0, -1), new Vector2Int( 1,  0), new Vector2Int(-1,  0)
-        };
-        foreach (var d in offs) {
-            var cell = origin + d;
-            if (enemiesByCell.TryGetValue(cell, out var e)) {
-                enemyCells.Remove(cell);
-                enemiesByCell.Remove(cell);
-                Destroy(e.gameObject);
-                return true;
-            }
+            return true;
         }
         return false;
     }
+
+    
+    private IEnumerator FadeThenDestroy(GameObject obj, float duration)
+    {
+        var sr = obj.GetComponentInChildren<SpriteRenderer>();
+        if (sr == null) 
+        {
+            Destroy(obj);
+            yield break;
+        }
+
+        float elapsed = 0f;
+        var original = sr.color;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / duration);
+            sr.color = new Color(original.r, original.g, original.b, alpha);
+            yield return null;
+        }
+
+        Destroy(obj);
+    }
+
 
     private IEnumerator AttackDelay(PlayerController p)
     {
@@ -303,4 +329,7 @@ public class GridManager : MonoBehaviour {
         }
         OnTorchRoomDoorClosed?.Invoke();
     }
-}
+    public void sfx(int index) =>        
+        soundFX.transform.GetChild(index).GetComponent<AudioSource>().Play();
+    }
+
