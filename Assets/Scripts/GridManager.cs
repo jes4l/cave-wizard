@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GridManager : MonoBehaviour {
     [SerializeField] private int width, height;
@@ -270,6 +271,7 @@ public class GridManager : MonoBehaviour {
         }
         var spawner = UnityEngine.Object.FindAnyObjectByType<EnemySpawner>();
         spawner?.ResetEnemies();
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void Restart() {
@@ -302,6 +304,7 @@ public class GridManager : MonoBehaviour {
 
         var spawner = UnityEngine.Object.FindAnyObjectByType<EnemySpawner>();
         spawner?.ResetEnemies();
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void OpenTorchRoomDoor() {
