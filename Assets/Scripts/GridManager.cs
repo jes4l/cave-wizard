@@ -91,11 +91,13 @@ public class GridManager : MonoBehaviour {
         foreach (var dir in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left })
         {
             var cell = origin + dir;
-            if (!enemiesByCell.TryGetValue(cell, out var enemy)) continue;
+            if (!enemiesByCell.TryGetValue(cell, out var enemy))
+                continue;
+
             enemyCells.Remove(cell);
             enemiesByCell.Remove(cell);
-            StartCoroutine(FadeThenDestroy(enemy.gameObject, 1.2f));
-
+            enemy.StopAllCoroutines();
+            StartCoroutine(FadeThenDestroy(enemy.gameObject, 1.1f));
             return true;
         }
         return false;

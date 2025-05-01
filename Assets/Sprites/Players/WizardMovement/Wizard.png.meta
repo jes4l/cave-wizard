@@ -1,13 +1,19 @@
 fileFormatVersion: 2
-guid: 6357f609d4a46a847a39bd57559d1bb7
+guid: ede6d9535da8f234292cdd2ca1b68932
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2531241511545790211
-    second: Enemy3_0
+      213: 1457491203435894738
+    second: Wizard_0
   - first:
-      213: -3475447687785860090
-    second: Enemy3_1
+      213: -4323298009402118593
+    second: Wizard_1
+  - first:
+      213: -5959617307868019196
+    second: Wizard_2
+  - first:
+      213: 6002840866345723114
+    second: Wizard_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -99,16 +105,63 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enemy3_0
+      name: Wizard_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 5
-        width: 86
+        x: 17
+        y: 0
+        width: 56
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d79d04078c0a3410800000000000000
+      internalID: 1457491203435894738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizard_1
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 35
+        width: 14
         height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -117,20 +170,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: df0279f91493fdcd0800000000000000
-      internalID: -2531241511545790211
+      spriteID: f3eee63cd5f8004c0800000000000000
+      internalID: -4323298009402118593
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy3_1
+      name: Wizard_2
       rect:
         serializedVersion: 2
-        x: 29
-        y: 53
-        width: 38
-        height: 38
+        x: 77
+        y: 17
+        width: 14
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,8 +191,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 604321eddbab4cfc0800000000000000
-      internalID: -3475447687785860090
+      spriteID: 406c14742af2b4da0800000000000000
+      internalID: -5959617307868019196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizard_3
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 0
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae42cb9a6ff5e4350800000000000000
+      internalID: 6002840866345723114
       vertices: []
       indices: 
       edges: []
@@ -155,8 +229,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Enemy3_0: -2531241511545790211
-      Enemy3_1: -3475447687785860090
+      Wizard_0: 1457491203435894738
+      Wizard_1: -4323298009402118593
+      Wizard_2: -5959617307868019196
+      Wizard_3: 6002840866345723114
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

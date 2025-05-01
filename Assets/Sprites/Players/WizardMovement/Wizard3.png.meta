@@ -1,25 +1,16 @@
 fileFormatVersion: 2
-guid: cb35a22b9c030ec4b9e973765051ba9b
+guid: 4453c32eef87c244abe95781144d4da5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4534232089794347179
-    second: WizardAttack5_0
+      213: -1240726805569044518
+    second: Wizard3_0
   - first:
-      213: -7735401168038786520
-    second: WizardAttack5_1
+      213: 5683609106788507268
+    second: Wizard3_1
   - first:
-      213: -2622362514352055390
-    second: WizardAttack5_2
-  - first:
-      213: 2358999302040575926
-    second: WizardAttack5_3
-  - first:
-      213: 3232384032595887929
-    second: WizardAttack5_4
-  - first:
-      213: 6278010685166115099
-    second: WizardAttack5_5
+      213: -6789704013176821743
+    second: Wizard3_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -111,59 +102,43 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WizardAttack5_0
+      name: Wizard3_0
       rect:
         serializedVersion: 2
         x: 17
-        y: 23
-        width: 56
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ba08e51ff04dcee30800000000000000
-      internalID: 4534232089794347179
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WizardAttack5_1
-      rect:
-        serializedVersion: 2
-        x: 77
-        y: 41
-        width: 14
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 82a08ef1f9556a490800000000000000
-      internalID: -7735401168038786520
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WizardAttack5_2
-      rect:
-        serializedVersion: 2
-        x: 29
         y: 0
-        width: 38
-        height: 25
+        width: 56
+        height: 91
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,20 +146,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2abdeb3ef2f7b9bd0800000000000000
-      internalID: -2622362514352055390
+      spriteID: adf70c24b8d08cee0800000000000000
+      internalID: -1240726805569044518
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WizardAttack5_3
+      name: Wizard3_1
       rect:
         serializedVersion: 2
         x: 77
         y: 23
         width: 14
-        height: 14
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -192,41 +167,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6bfd58fdd59dcb020800000000000000
-      internalID: 2358999302040575926
+      spriteID: 48edd4c9e5c30ee40800000000000000
+      internalID: 5683609106788507268
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WizardAttack5_4
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 11
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 937c588d62cbbdc20800000000000000
-      internalID: 3232384032595887929
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WizardAttack5_5
+      name: Wizard3_2
       rect:
         serializedVersion: 2
         x: 83
-        y: 11
+        y: 0
         width: 8
-        height: 8
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,8 +188,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b19de61b479ff1750800000000000000
-      internalID: 6278010685166115099
+      spriteID: 1182d846c2026c1a0800000000000000
+      internalID: -6789704013176821743
       vertices: []
       indices: 
       edges: []
@@ -251,12 +205,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      WizardAttack5_0: 4534232089794347179
-      WizardAttack5_1: -7735401168038786520
-      WizardAttack5_2: -2622362514352055390
-      WizardAttack5_3: 2358999302040575926
-      WizardAttack5_4: 3232384032595887929
-      WizardAttack5_5: 6278010685166115099
+      Wizard3_0: -1240726805569044518
+      Wizard3_1: 5683609106788507268
+      Wizard3_2: -6789704013176821743
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

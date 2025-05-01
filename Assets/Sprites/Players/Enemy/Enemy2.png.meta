@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 52585776265ed834f8e4963c54ce4824
+guid: 6357f609d4a46a847a39bd57559d1bb7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7723652632321733531
-    second: Enemy2_0
+      213: -2531241511545790211
+    second: Enemy3_0
   - first:
-      213: 4566099760326480194
-    second: Enemy2_1
+      213: -3475447687785860090
+    second: Enemy3_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -99,16 +99,42 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enemy2_0
+      name: Enemy3_0
       rect:
         serializedVersion: 2
-        x: 11
+        x: 5
         y: 5
-        width: 80
+        width: 86
         height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -117,14 +143,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b933c0eb52def2b60800000000000000
-      internalID: 7723652632321733531
+      spriteID: df0279f91493fdcd0800000000000000
+      internalID: -2531241511545790211
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enemy2_1
+      name: Enemy3_1
       rect:
         serializedVersion: 2
         x: 29
@@ -138,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 241914f2a8b0e5f30800000000000000
-      internalID: 4566099760326480194
+      spriteID: 604321eddbab4cfc0800000000000000
+      internalID: -3475447687785860090
       vertices: []
       indices: 
       edges: []
@@ -155,8 +181,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Enemy2_0: 7723652632321733531
-      Enemy2_1: 4566099760326480194
+      Enemy3_0: -2531241511545790211
+      Enemy3_1: -3475447687785860090
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
