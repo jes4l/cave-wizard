@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
     [SerializeField] private GameObject enemyPrefab;
-    Vector3?[,] spawnPoints = {{null, null, null}, 
+    Vector3?[,] spawnPoints = {{new Vector3(9, 5, -1), null, null},
+                               {null, null, null}, 
                                {null, null, null},
                                {new Vector3(8, 8, -1), new Vector3(6, 2, -1), null},
                                {new Vector3(6, 8, -1), new Vector3(14, 4, -1), new Vector3(1, 3, -1)},
                                {new Vector3(7, 8, -1), new Vector3(4, 0, -1), new Vector3(8, 3, -1)}};
 
     // -1. x 0.> 1.< 2.^ 3.v 4.[o]                          
-    int[,] modes = {{-1, -1, -1}, {-1, -1, -1}, {3, 1, -1}, {4, 1, 0}, {4, 4, 2}};
+    int[,] modes = {{3, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {3, 1, -1}, {4, 1, 0}, {4, 4, 2}};
 
     void Start() {
         ResetEnemies();
