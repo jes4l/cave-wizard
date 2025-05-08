@@ -1,16 +1,21 @@
 using UnityEngine;
 
+// Handles the speed and direction in which the projectile spawns.
+// Gives the enemy spawner the mode in which the projectile will shoot.
 public class ProjectileController : MonoBehaviour {
     public int speed = 5;
     public int mode = 0;
 
-    private Vector3 Aimbot;
+    private Vector3 aimbot;
     private SpriteRenderer spriteRenderer;
 
     void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
+     
+    // On start, if the mode is 4, it will find the players position.
+    // It will then fire a projector directly at the player.
+    // Doesnt not lock onto the players position.
     void Start() {
         if (mode == 4) {
             PlayerController realPlayer = null;
@@ -24,10 +29,13 @@ public class ProjectileController : MonoBehaviour {
                 ? realPlayer.transform.position
                 : transform.position;
 
-            Aimbot = (target - transform.position).normalized;
+            aimbot = (target - transform.position).normalized;
         }
     }
 
+    // The modes for all the projectiles.
+    // Each mode contains the direction for the projectile to fire.
+    // The projectile is rotated before firing so the sprites faces the same way.
     void Update() {
         Vector3 dir;
         float zRot;
@@ -54,8 +62,8 @@ public class ProjectileController : MonoBehaviour {
                 break;
 
             case 4: // [o]
-                dir  = Aimbot * 0.5f;
-                zRot = Mathf.Atan2(Aimbot.y, Aimbot.x) * Mathf.Rad2Deg + 180f;
+                dir  = aimbot * 0.5f;
+                zRot = Mathf.Atan2(aimbot.y, aimbot.x) * Mathf.Rad2Deg + 180f;
                 break;
 
             default:
