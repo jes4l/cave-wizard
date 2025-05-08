@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "wizard-puzzler.sln"
+    "dotnet.defaultSolution": "cave-wizard.sln"
 }

@@ -15,7 +15,7 @@ public class LevelLink : MonoBehaviour
         {
             case 0:
                 StartCoroutine(LoadSceneAfterDelay(2));
-                GridManager.levelNumber = 1;
+                GridManager.levelNumber = 0;
                 break;
             case 1:
                 StartCoroutine(LoadSceneAfterDelay(1));
@@ -30,7 +30,6 @@ public class LevelLink : MonoBehaviour
                 break;
             case 3:
                 StartCoroutine(LoadSceneAfterDelay(0));
-                GridManager.levelNumber = 0;
                 break;
         }
     }

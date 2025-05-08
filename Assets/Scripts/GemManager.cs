@@ -10,23 +10,19 @@ public class GemManager : MonoBehaviour {
     private readonly List<GameObject> _allGems = new();
     private readonly HashSet<Vector2Int> _occupied = new();
 
-    int[,,] gemSpawnPoints = {{{6, 1}, {8, 1}, {10, 1}}, // Intsructions
-                              {{3, 7}, {10, 2}, {2, 1}}, // level 1
-                              {{9, 1}, {13, 4}, {14,3}}, // level 2
-                              {{14, 7}, {2, 0}, {13, 3}},// level 3
-                              {{7, 7}, {9, 7}, {3, 6}}, // level 4
-                              {{8, 5}, {9, 7}, {2, 5}}, // level 5
+    int[,,] gemSpawnPoints = {{{3, 7}, {10, 2}, {2, 1}}, // do not touch
+                              {{9, 1}, {13, 4}, {14,3}}, // do not touch
+                              {{14, 7}, {2, 0}, {13, 3}},  // do not touch
+                              {{7, 7}, {9, 7}, {3, 6}},
+                              {{8, 5}, {9, 7}, {2, 5}},
                               };
-                              
     
-    int[,,] decoySpawnPoints = {{{-1, -1}, {-1, -1}, {-1, -1}}, // Intsructions
-                              {{6, 4}, {-1, -1}, {-1, -1}},     // level 1
-                              {{12, 4}, {3, 7}, {1, 5}},        // level 2
-                              {{9, 6}, {5, 4}, {9, 8}},         // level 3
-                              {{10, 2}, {6, 2}, {11, 4}},       // level 4
-                              {{13, 5}, {12, 8}, {6, 1}},       // level 5
+    int[,,] decoySpawnPoints = {{{6, 4}, {-1, -1}, {-1, -1}}, // do not touch
+                              {{12, 4}, {3, 7}, {1, 5}}, // do not touch
+                              {{9, 6}, {5, 4}, {9, 8}}, // do not touch
+                              {{10, 2}, {6, 2}, {11, 4}},
+                              {{13, 5}, {12, 8}, {6, 1}},
                               };
-                              
 
     void Start() {
         GameObject[] gems = {_gem1Prefab, _gem2Prefab, _gem3Prefab};
