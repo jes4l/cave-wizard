@@ -2344,10 +2344,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a22ef4e4970a2d549a82fa5fd3cb8cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridManager: {fileID: 1116084821}
-  _gem1Prefab: {fileID: 9200152911833572457, guid: 52d260957efe8d44da221f5776737c12, type: 3}
-  _gem2Prefab: {fileID: 854955990624821990, guid: 45065eadfe32f84458efe4051235514e, type: 3}
-  _gem3Prefab: {fileID: 504028895065151417, guid: dfc22b1c366f72446abd26a1f87268aa, type: 3}
+  gridManager: {fileID: 1116084821}
+  gem1Prefab: {fileID: 9200152911833572457, guid: 52d260957efe8d44da221f5776737c12, type: 3}
+  gem2Prefab: {fileID: 854955990624821990, guid: 45065eadfe32f84458efe4051235514e, type: 3}
+  gem3Prefab: {fileID: 504028895065151417, guid: dfc22b1c366f72446abd26a1f87268aa, type: 3}
 --- !u!4 &1128824945
 Transform:
   m_ObjectHideFlags: 0

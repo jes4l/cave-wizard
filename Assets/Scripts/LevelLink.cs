@@ -5,14 +5,15 @@ using System.Collections;
 using UnityEditor;
 #endif
 
-public class LevelLink : MonoBehaviour
-{
+// Manages sounds, button delays and scenes to go to the correct one.
+public class LevelLink : MonoBehaviour {
     public GameObject soundFX;
 
-    public void OnClick(int index)
-    {
-        switch (index)
-        {
+    // There is a delay to let the sound effects play.
+    // Created so that there is time to let the music play before moving on to new scene.
+    // Acts as a manager for buttons to move to scenes.
+    public void OnClick(int index) {
+        switch (index) {
             case 0:
                 StartCoroutine(LoadSceneAfterDelay(2));
                 GridManager.levelNumber = 0;
@@ -33,12 +34,12 @@ public class LevelLink : MonoBehaviour
                 break;
         }
     }
-    
+    // Plays sound effects.
     private void sfx(int i) =>
         soundFX.transform.GetChild(i).GetComponent<AudioSource>().Play();
 
-    private IEnumerator LoadSceneAfterDelay(int sceneIndex)
-    {
+    // Delay before loading scene to play sound effects.
+    private IEnumerator LoadSceneAfterDelay(int sceneIndex) {
         sfx(0);
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(sceneIndex);
