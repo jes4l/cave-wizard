@@ -12,16 +12,20 @@ public class LevelLink : MonoBehaviour {
     // There is a delay to let the sound effects play.
     // Created so that there is time to let the music play before moving on to new scene.
     // Acts as a manager for buttons to move to scenes.
+    // Level Number remians 0 upon clicking the start button.
     public void OnClick(int index) {
         switch (index) {
             case 0:
+                // start
                 StartCoroutine(LoadSceneAfterDelay(2));
                 GridManager.levelNumber = 0;
                 break;
             case 1:
+                // instructions
                 StartCoroutine(LoadSceneAfterDelay(1));
                 break;
             case 2:
+                // quit on editor / build
                 sfx(0);
                 #if UNITY_EDITOR
                 EditorApplication.isPlaying = false;
@@ -30,6 +34,7 @@ public class LevelLink : MonoBehaviour {
                 #endif
                 break;
             case 3:
+                // back on instructions / home on win screen
                 StartCoroutine(LoadSceneAfterDelay(0));
                 break;
         }

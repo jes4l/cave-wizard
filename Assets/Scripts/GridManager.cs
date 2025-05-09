@@ -8,6 +8,9 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+// Manages all items on the grid ei torch, button, obstacles, doors
+// Manages the Respawn ghosts and reset button and retrives sounds from prefabs.
+// Handles Player and ghost animations and attacks.
 public class GridManager : MonoBehaviour {
     [SerializeField] private int width, height;
     [SerializeField] private Tile tilePrefab;
