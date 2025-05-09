@@ -135,11 +135,6 @@ public class PlayerController : MonoBehaviour {
             Debug.Log("Tried to move to invalid tile.");
             return;
         }
-        if (gridManager.IsDeadly(target)) {
-            Debug.Log($"Entered deadly tile at {target} – respawning.");
-            if (!ghost) gridManager.RespawnPlayer();
-            return;
-        }
 
         gridManager.ClearHighlights();
 
@@ -181,6 +176,12 @@ public class PlayerController : MonoBehaviour {
 
         energy--;
         Debug.Log($"Player moved to {gridPosition} (Δt = {delta:F2}s). Energy: {energy}");
+        
+        if (gridManager.IsDeadly(target)) {
+            Debug.Log($"Entered deadly tile at {target} – respawning.");
+            if (!ghost) gridManager.RespawnPlayer();
+            return;
+        }
 
         bool isOnButton = gridPosition == buttonPos;
         if (isOnButton) {

@@ -51,6 +51,7 @@ public class GridManager : MonoBehaviour {
     public event Action OnTorchRoomDoorClosed;
 
     private bool attackLock;
+    private bool isClosingDoor = false;
 
     // Gets refrences to for all the items in the tilemap.
     // caches them into hash sets
@@ -359,8 +360,12 @@ public class GridManager : MonoBehaviour {
 
     // Activates door visuals and collisions
     // Increase the buttons alpha by 50% to show it has not been clicked.
+    // where door closes add to deadly tile.
     public void CloseTorchRoomDoor() {
-        if (torchDoorTilemap          != null) torchDoorTilemap.gameObject.SetActive(true);
+        if (isClosingDoor) return;
+        isClosingDoor = true;
+        if (torchDoorTilemap != null)
+            torchDoorTilemap.gameObject.SetActive(true);
         if (torchDoorCollisionTilemap != null) {
             torchDoorCollisionTilemap.gameObject.SetActive(true);
             CacheTiles(torchDoorCollisionTilemap, deadlyCells, doorCells);
@@ -371,7 +376,12 @@ public class GridManager : MonoBehaviour {
             buttonTilemap.color = c;
         }
         OnTorchRoomDoorClosed?.Invoke();
+        if (player != null && deadlyCells.Contains(player.GetGridPosition())) {
+            RespawnPlayer();
+        }
+        isClosingDoor = false;
     }
+
 
     // Play sound based on prefabs index.
     public void sfx(int index) =>        
