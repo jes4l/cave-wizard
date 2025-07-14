@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour {
         // either +2, +4, or +7
         // Player movement costs +1 energy movepoint
         // If ghost is on button and player goes on button and comes of door remains open.
-        Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
+        Collider2D[] hits = Physics2D.OverlapPointAll(transform.position, Physics2D.AllLayers);
         foreach (var hit in hits) {
             if (hit.CompareTag("Gem1")) {
                 energy += 2;
